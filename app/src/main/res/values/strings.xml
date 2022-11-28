@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">STAR_BT</string>
+
+    <string name="spinner_LigneBus">Choisir une ligne de bus</string>
 </resources>
