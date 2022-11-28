@@ -1,14 +1,15 @@
 package fr.istic.mob.star_bt
 
 import androidx.room.*
+import java.text.DateFormat
 import java.util.*
 
 
 @Entity(
     tableName = "calendar")
 data class calendar(
-    val StartDate : Date,
-    val EndDate: Date,
+    val StartDate : String,
+    val EndDate: String ,
     val monday : Int,
     val tuesday : Int,
     val wednesday: Int,

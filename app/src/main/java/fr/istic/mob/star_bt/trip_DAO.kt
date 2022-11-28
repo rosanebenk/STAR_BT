@@ -1,6 +1,7 @@
 package fr.istic.mob.star_bt
 import androidx.room.*
 
+@Dao
 interface trip_DAO {
     @Insert
     fun addObjet(objet: trip):Long
