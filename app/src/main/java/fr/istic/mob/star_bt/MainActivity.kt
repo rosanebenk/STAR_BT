@@ -1,22 +1,30 @@
 package fr.istic.mob.star_bt
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.AlertDialog
+import android.app.DatePickerDialog
+import android.app.DatePickerDialog.OnDateSetListener
 import android.os.Bundle
 import android.view.View
-import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
+import java.util.Calendar
+
 
 class MainActivity : AppCompatActivity() {
     lateinit var spinner_LigneBus: Spinner
+    lateinit var datePickerDialog: DatePickerDialog
+    lateinit var buttonDate: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        initDatePicker()
+        buttonDate = findViewById(R.id.datePickerButton)
+        buttonDate.text = getTodaysDate()
         spinner_LigneBus = findViewById(R.id.spinner_LigneBus)
 
         //Employee[] employees = EmployeeDataUtils.getEmployees();
@@ -38,6 +46,59 @@ class MainActivity : AppCompatActivity() {
                 TODO("Not yet implemented")
             }
         })
+
+    }
+
+    private fun getTodaysDate(): String {
+        val cal: Calendar = Calendar.getInstance()
+        val year: Int = cal.get(Calendar.YEAR)
+        var month: Int = cal.get(Calendar.MONTH)
+        month += 1
+        val day: Int = cal.get(Calendar.DAY_OF_MONTH)
+        return makeDateString(day, month, year)
+    }
+
+    private fun initDatePicker() {
+        val dateSetListener =
+            OnDateSetListener { datePicker, year, month, day ->
+                var month = month
+                month += 1
+                val date: String = makeDateString(day, month, year)
+                buttonDate.text = date
+            }
+
+        val cal: Calendar = Calendar.getInstance()
+        val year: Int = cal.get(Calendar.YEAR)
+        val month: Int = cal.get(Calendar.MONTH)
+        val day: Int = cal.get(Calendar.DAY_OF_MONTH)
+
+        val style: Int = AlertDialog.THEME_HOLO_LIGHT
+
+        datePickerDialog = DatePickerDialog(this, style, dateSetListener, year, month, day)
+        datePickerDialog.datePicker.minDate = System.currentTimeMillis()-1000
+    }
+
+    private fun makeDateString(day: Int, month: Int, year: Int): String {
+        return getMonthFormat(month) + " " + day + " " + year
+    }
+
+    private fun getMonthFormat(month: Int): String {
+        if (month == 1) return "JAN"
+        if (month == 2) return "FEB"
+        if (month == 3) return "MAR"
+        if (month == 4) return "APR"
+        if (month == 5) return "MAY"
+        if (month == 6) return "JUN"
+        if (month == 7) return "JUL"
+        if (month == 8) return "AUG"
+        if (month == 9) return "SEP"
+        if (month == 10) return "OCT"
+        if (month == 11) return "NOV"
+        return if (month == 12) "DEC" else "JAN"
+    }
+
+    fun openDatePicker(view: View) {
+        datePickerDialog.show()
     }
 }
 
