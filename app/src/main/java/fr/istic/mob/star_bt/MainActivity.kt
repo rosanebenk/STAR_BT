@@ -5,22 +5,21 @@ import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Context
 import android.net.ConnectivityManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.view.get
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
-import java.io.IOException
-import java.util.Calendar
+import java.io.*
+import java.net.URL
+import java.util.*
+import java.util.zip.ZipEntry
+import java.util.zip.ZipFile
+import java.util.zip.ZipInputStream
 
 
 class MainActivity : AppCompatActivity() {
@@ -117,10 +116,82 @@ class MainActivity : AppCompatActivity() {
         val networkInfo = connMgr.activeNetworkInfo
         /*6*il faut tester d’abord la connexion internet7*/
         if(networkInfo !=null&& networkInfo.isConnected) {
-            DownloadAsyncTask(this, "test.zip").execute(url)
+            DownloadAsyncTask(this, "data.zip").execute(url)
+            val zipFile : File = File(applicationContext.filesDir,"data.zip")
+            val destDir =  applicationContext.filesDir.toString() +  File.separator + "DATA"
+            UnzipUtils.unzip(zipFile,destDir)
+
         }
         else{
             Log.e("download", "Connexion réseau indisponible.")}
+    }
+
+    /**
+     * UnzipUtils class extracts files and sub-directories of a standard zip file to
+     * a destination directory.
+     *
+     */
+    object UnzipUtils {
+        /**
+         * @param zipFilePath
+         * @param destDirectory
+         * @throws IOException
+         */
+        @Throws(IOException::class)
+        fun unzip(zipFilePath: File, destDirectory: String) {
+
+            File(destDirectory).run {
+                if (!exists()) {
+                    mkdirs()
+                }
+            }
+
+            ZipFile(zipFilePath).use { zip ->
+
+                zip.entries().asSequence().forEach { entry ->
+
+                    zip.getInputStream(entry).use { input ->
+
+
+                        val filePath = destDirectory + File.separator + entry.name
+
+                        if (!entry.isDirectory) {
+                            // if the entry is a file, extracts it
+                            extractFile(input, filePath)
+                        } else {
+                            // if the entry is a directory, make the directory
+                            val dir = File(filePath)
+                            dir.mkdir()
+                        }
+
+                    }
+
+                }
+            }
+        }
+
+        /**
+         * Extracts a zip entry (file entry)
+         * @param inputStream
+         * @param destFilePath
+         * @throws IOException
+         */
+        @Throws(IOException::class)
+        private fun extractFile(inputStream: InputStream, destFilePath: String) {
+            val bos = BufferedOutputStream(FileOutputStream(destFilePath))
+            val bytesIn = ByteArray(BUFFER_SIZE)
+            var read: Int
+            while (inputStream.read(bytesIn).also { read = it } != -1) {
+                bos.write(bytesIn, 0, read)
+            }
+            bos.close()
+        }
+
+        /**
+         * Size of the buffer to read/write data
+         */
+        private const val BUFFER_SIZE = 4096
+
     }
 
 }

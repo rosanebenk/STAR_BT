@@ -44,17 +44,10 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
             val url = URL(myurl)
             open = DataInputStream(url.openStream())
             return readIt(open)
-//            val zipFile : File = File(applicationContext.filesDir,"test.zip")
-//            unpackZip(zipFile.path)
-//
-//
-//            val textFile : File = File(applicationContext.filesDir,"agency.txt")
-//
-//
-//            var open = DataInputStream(url.openStream())
-//            val inputAsString = open.readTextAndClose();
-//            return textFile.bufferedReader().use { it.readText() }
-        }catch(e: Exception) { }
+
+        }catch(e: Exception) {
+            e.printStackTrace()
+        }
         finally{
             if(open !=null) { open.close() }
         }
@@ -62,63 +55,18 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
     }
     private fun readIt(stream: InputStream): ByteArray? {
         try {
-            val bo = ByteArrayOutputStream()
+            val buffer = ByteArrayOutputStream()
             var i = stream.read()
             while (i != -1) {
-                bo.write(i)
+                buffer.write(i)
                 i = stream.read()
             }
 
-            //Log.e("", dezipper(bo))
-            return bo.toByteArray()
+            return buffer.toByteArray()
         } catch (e: IOException) {
-            ""
+            e.printStackTrace()
         }
         return null
     }
-//    fun unpackZip(filePath : String){
-//        var inputStream : InputStream
-//        var zipInputStream : ZipInputStream
-//
-//        try{
-//            var zipFile = File(filePath)
-//            var parentFolder = zipFile.parentFile.path
-//            var filename = ""
-//            inputStream = FileInputStream(filePath)
-//            zipInputStream = ZipInputStream(BufferedInputStream(inputStream))
-//
-//
-//            val buffer = ByteArray(1024)
-//            var count: Int
-//
-//            var  zipEntry : ZipEntry? = zipInputStream.nextEntry
-//            while (zipEntry != null) {
-//                filename = zipEntry.getName()
-//                if (zipEntry.isDirectory()) {
-//                    val fmd = File("$parentFolder/$filename")
-//                    fmd.mkdirs()
-//                    continue
-//                }
-//                val fout = FileOutputStream("$parentFolder/$filename")
-//                Log.i("TAG","UNZIPPING $filename")
-//                while (zipInputStream.read(buffer).also { count = it } !== -1) {
-//                    fout.write(buffer, 0, count)
-//                }
-//
-//                fout.close()
-//
-//                zipEntry = zipInputStream.nextEntry
-//                zipInputStream.closeEntry()
-//
-//            }
-//
-//
-//            zipInputStream.close()
-//
-//        }
-//        catch (e: IOException){
-//
-//            e.printStackTrace();
-//        }
-//    }
+
 }
