@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">STAR_BT</string>
 
+    <string name="titre_LigneBus">Choisir une ligne de bus</string>
     <string name="spinner_LigneBus">Choisir une ligne de bus</string>
+    <string name="titre_date">Choisir une date</string>
+    <string name="titre_heure">Choisir une heure</string>
+    <string name="titre_direction">Choisir une direction</string>
 </resources>
