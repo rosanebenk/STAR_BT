@@ -115,10 +115,8 @@ class MainActivity : AppCompatActivity() {
         /*6*il faut tester d’abord la connexion internet7*/
         if(networkInfo !=null&& networkInfo.isConnected) {
             DownloadAsyncTask(this, "data.zip").execute(url)
-            while (File(applicationContext.filesDir,"data.zip") == null){}
-                val zipFile : File = File(applicationContext.filesDir,"data.zip")
-                val destDir =  applicationContext.filesDir.toString() +  File.separator + "DATA"
-                UnzipUtils.unzip(zipFile,destDir)
+
+
 
 
 
@@ -127,73 +125,7 @@ class MainActivity : AppCompatActivity() {
             Log.e("download", "Connexion réseau indisponible.")}
     }
 
-    /**
-     * UnzipUtils class extracts files and sub-directories of a standard zip file to
-     * a destination directory.
-     *
-     */
-    object UnzipUtils {
-        /**
-         * @param zipFilePath
-         * @param destDirectory
-         * @throws IOException
-         */
-        @Throws(IOException::class)
-        fun unzip(zipFilePath: File, destDirectory: String) {
 
-            File(destDirectory).run {
-                if (!exists()) {
-                    mkdirs()
-                }
-            }
-
-            ZipFile(zipFilePath).use { zip ->
-
-                zip.entries().asSequence().forEach { entry ->
-
-                    zip.getInputStream(entry).use { input ->
-
-
-                        val filePath = destDirectory + File.separator + entry.name
-
-                        if (!entry.isDirectory) {
-                            // if the entry is a file, extracts it
-                            extractFile(input, filePath)
-                        } else {
-                            // if the entry is a directory, make the directory
-                            val dir = File(filePath)
-                            dir.mkdir()
-                        }
-
-                    }
-
-                }
-            }
-        }
-
-        /**
-         * Extracts a zip entry (file entry)
-         * @param inputStream
-         * @param destFilePath
-         * @throws IOException
-         */
-        @Throws(IOException::class)
-        private fun extractFile(inputStream: InputStream, destFilePath: String) {
-            val bos = BufferedOutputStream(FileOutputStream(destFilePath))
-            val bytesIn = ByteArray(BUFFER_SIZE)
-            var read: Int
-            while (inputStream.read(bytesIn).also { read = it } != -1) {
-                bos.write(bytesIn, 0, read)
-            }
-            bos.close()
-        }
-
-        /**
-         * Size of the buffer to read/write data
-         */
-        private const val BUFFER_SIZE = 4096
-
-    }
 
 
 
