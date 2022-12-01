@@ -115,9 +115,12 @@ class MainActivity : AppCompatActivity() {
         /*6*il faut tester d’abord la connexion internet7*/
         if(networkInfo !=null&& networkInfo.isConnected) {
             DownloadAsyncTask(this, "data.zip").execute(url)
-            val zipFile : File = File(applicationContext.filesDir,"data.zip")
-            val destDir =  applicationContext.filesDir.toString() +  File.separator + "DATA"
-            UnzipUtils.unzip(zipFile,destDir)
+            if (File(applicationContext.filesDir,"data.zip") != null){
+                val zipFile : File = File(applicationContext.filesDir,"data.zip")
+                val destDir =  applicationContext.filesDir.toString() +  File.separator + "DATA"
+                UnzipUtils.unzip(zipFile,destDir)
+            }
+
 
         }
         else{
