@@ -13,13 +13,11 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import fr.istic.mob.star_bt.RoomService.context
 import kotlinx.coroutines.*
 import java.io.*
-import java.net.URL
 import java.util.*
-import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
-import java.util.zip.ZipInputStream
 
 
 class MainActivity : AppCompatActivity() {
@@ -193,6 +191,8 @@ class MainActivity : AppCompatActivity() {
         private const val BUFFER_SIZE = 4096
 
     }
+
+
 
 }
 
