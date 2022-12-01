@@ -3,6 +3,8 @@ package fr.istic.mob.star_bt
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
+import android.app.TimePickerDialog
+import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -13,17 +15,18 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
-import fr.istic.mob.star_bt.RoomService.context
 import kotlinx.coroutines.*
 import java.io.*
 import java.util.*
-import java.util.zip.ZipFile
 
 
 class MainActivity : AppCompatActivity() {
     lateinit var spinner_LigneBus: Spinner
     lateinit var datePickerDialog: DatePickerDialog
     lateinit var buttonDate: Button
+    var timeButton: Button? = null
+    var hour: Int = 0
+    var minute:Int = 0
     private var url = "https://eu.ftp.opendatasoft.com/star/gtfs/GTFS_2022.3.3.0_20221128_20221218.zip"
     //private var filePath = "src/resources/myfile.txt"
 
@@ -33,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         initDatePicker()
         buttonDate = findViewById(R.id.datePickerButton)
         buttonDate.text = getTodaysDate()
+        timeButton = findViewById(R.id.timeButton);
         spinner_LigneBus = findViewById(R.id.spinner_LigneBus)
         downloadFileFromWeb(url)
 
@@ -109,94 +113,39 @@ class MainActivity : AppCompatActivity() {
     fun openDatePicker(view: View) {
         datePickerDialog.show()
     }
+
+    fun popTimePicker(view: View?) {
+        val onTimeSetListener =
+            OnTimeSetListener { timePicker, selectedHour, selectedMinute ->
+                hour = selectedHour
+                minute = selectedMinute
+                timeButton?.setText(
+                    java.lang.String.format(
+                        Locale.getDefault(),
+                        "%02d:%02d",
+                        hour,
+                        minute
+                    )
+                )
+            }
+
+        // int style = AlertDialog.THEME_HOLO_DARK;
+        val timePickerDialog =
+            TimePickerDialog(this,  /*style,*/onTimeSetListener, hour, minute, true)
+        timePickerDialog.setTitle("Select Time")
+        timePickerDialog.show()
+    }
+
     fun downloadFileFromWeb(url : String) {
         val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connMgr.activeNetworkInfo
         /*6*il faut tester d’abord la connexion internet7*/
         if(networkInfo !=null&& networkInfo.isConnected) {
             DownloadAsyncTask(this, "data.zip").execute(url)
-            while (File(applicationContext.filesDir,"data.zip") == null){}
-                val zipFile : File = File(applicationContext.filesDir,"data.zip")
-                val destDir =  applicationContext.filesDir.toString() +  File.separator + "DATA"
-                //UnzipUtils.unzip(zipFile,destDir)
-
-
-
         }
         else{
             Log.e("download", "Connexion réseau indisponible.")}
     }
-
-    /**
-     * UnzipUtils class extracts files and sub-directories of a standard zip file to
-     * a destination directory.
-     *
-     */
-    object UnzipUtils {
-        /**
-         * @param zipFilePath
-         * @param destDirectory
-         * @throws IOException
-         */
-        @Throws(IOException::class)
-        fun unzip(zipFilePath: File, destDirectory: String) {
-
-            File(destDirectory).run {
-                if (!exists()) {
-                    mkdirs()
-                }
-            }
-
-            ZipFile(zipFilePath).use { zip ->
-
-                zip.entries().asSequence().forEach { entry ->
-
-                    zip.getInputStream(entry).use { input ->
-
-
-                        val filePath = destDirectory + File.separator + entry.name
-
-                        if (!entry.isDirectory) {
-                            // if the entry is a file, extracts it
-                            extractFile(input, filePath)
-                        } else {
-                            // if the entry is a directory, make the directory
-                            val dir = File(filePath)
-                            dir.mkdir()
-                        }
-
-                    }
-
-                }
-            }
-        }
-
-        /**
-         * Extracts a zip entry (file entry)
-         * @param inputStream
-         * @param destFilePath
-         * @throws IOException
-         */
-        @Throws(IOException::class)
-        private fun extractFile(inputStream: InputStream, destFilePath: String) {
-            val bos = BufferedOutputStream(FileOutputStream(destFilePath))
-            val bytesIn = ByteArray(BUFFER_SIZE)
-            var read: Int
-            while (inputStream.read(bytesIn).also { read = it } != -1) {
-                bos.write(bytesIn, 0, read)
-            }
-            bos.close()
-        }
-
-        /**
-         * Size of the buffer to read/write data
-         */
-        private const val BUFFER_SIZE = 4096
-
-    }
-
-
-
 }
 
 private operator fun AdapterView.OnItemSelectedListener?.invoke(onItemSelectedListener: AdapterView.OnItemSelectedListener) {

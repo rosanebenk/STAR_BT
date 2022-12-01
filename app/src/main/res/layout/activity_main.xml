@@ -69,13 +69,15 @@
 
     <Button
         android:id="@+id/timeButton"
+        style="?android:spinnerStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:width="250dp"
         android:height="75dp"
         android:onClick="popTimePicker"
         android:text="@string/titre_heure"
-        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.099"
