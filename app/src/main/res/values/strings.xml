@@ -6,4 +6,19 @@
     <string name="titre_date">Choisir une date</string>
     <string name="titre_heure">Choisir une heure</string>
     <string name="titre_direction">Choisir une direction</string>
+
+
+    <string name="JAN">JAN</string>
+    <string name="FEB">FEV</string>
+    <string name="MAR">MAR</string>
+    <string name="APR">AVR</string>
+    <string name="MAY">MAI</string>
+    <string name="JUN">JUIN</string>
+    <string name="JUL">JUIL</string>
+    <string name="AUG">AOUT</string>
+    <string name="SEP">SEP</string>
+    <string name="OCT">OCT</string>
+    <string name="NOV">NOV</string>
+    <string name="DEC">DEC</string>
+
 </resources>

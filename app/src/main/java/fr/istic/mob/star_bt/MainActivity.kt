@@ -14,6 +14,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
 import java.io.*
@@ -25,6 +26,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var datePickerDialog: DatePickerDialog
     lateinit var buttonDate: Button
     var timeButton: Button? = null
+    var dateFormatBDD: String = ""
+    var heureFormatBDD:String = ""
+    var monthString: String = ""
+    var dayString: String = ""
     var hour: Int = 0
     var minute:Int = 0
     private var url = "https://eu.ftp.opendatasoft.com/star/gtfs/GTFS_2022.3.3.0_20221128_20221218.zip"
@@ -68,6 +73,9 @@ class MainActivity : AppCompatActivity() {
         var month: Int = cal.get(Calendar.MONTH)
         month += 1
         val day: Int = cal.get(Calendar.DAY_OF_MONTH)
+        dateFormatBDD = ""+year+monthtoString(month)+daytoString(day)
+        Toast.makeText(this, dateFormatBDD, Toast.LENGTH_LONG).show()
+
         return makeDateString(day, month, year)
     }
 
@@ -92,22 +100,41 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun makeDateString(day: Int, month: Int, year: Int): String {
-        return getMonthFormat(month) + " " + day + " " + year
+        dateFormatBDD = ""+year+monthtoString(month)+daytoString(day)
+        return ""+ day + " " + getMonthFormat(month) + " " + year
     }
 
     private fun getMonthFormat(month: Int): String {
-        if (month == 1) return "JAN"
-        if (month == 2) return "FEB"
-        if (month == 3) return "MAR"
-        if (month == 4) return "APR"
-        if (month == 5) return "MAY"
-        if (month == 6) return "JUN"
-        if (month == 7) return "JUL"
-        if (month == 8) return "AUG"
-        if (month == 9) return "SEP"
-        if (month == 10) return "OCT"
-        if (month == 11) return "NOV"
-        return if (month == 12) "DEC" else "JAN"
+        if (month == 1) return resources.getString(R.string.JAN)
+        if (month == 2) return resources.getString(R.string.FEB)
+        if (month == 3) return resources.getString(R.string.MAR)
+        if (month == 4) return resources.getString(R.string.APR)
+        if (month == 5) return resources.getString(R.string.MAY)
+        if (month == 6) return resources.getString(R.string.JUN)
+        if (month == 7) return resources.getString(R.string.JUL)
+        if (month == 8) return resources.getString(R.string.AUG)
+        if (month == 9) return resources.getString(R.string.SEP)
+        if (month == 10) return resources.getString(R.string.OCT)
+        if (month == 11) return resources.getString(R.string.NOV)
+        return if (month == 12) resources.getString(R.string.DEC) else resources.getString(R.string.JAN)
+    }
+
+    private fun monthtoString(month: Int):String{
+        monthString = if(month in 1..9){
+            "0$month"
+        }else{
+            ""+month
+        }
+        return monthString
+    }
+
+    private fun daytoString(day: Int):String{
+        dayString = if(day in 1..9){
+            "0$day"
+        }else{
+            ""+day
+        }
+        return dayString
     }
 
     fun openDatePicker(view: View) {
@@ -119,13 +146,11 @@ class MainActivity : AppCompatActivity() {
             OnTimeSetListener { timePicker, selectedHour, selectedMinute ->
                 hour = selectedHour
                 minute = selectedMinute
-                timeButton?.setText(
-                    java.lang.String.format(
-                        Locale.getDefault(),
-                        "%02d:%02d",
-                        hour,
-                        minute
-                    )
+                timeButton?.text = java.lang.String.format(
+                    Locale.getDefault(),
+                    "%02d:%02d",
+                    hour,
+                    minute
                 )
             }
 
@@ -134,6 +159,7 @@ class MainActivity : AppCompatActivity() {
             TimePickerDialog(this,  /*style,*/onTimeSetListener, hour, minute, true)
         timePickerDialog.setTitle("Select Time")
         timePickerDialog.show()
+
     }
 
     fun downloadFileFromWeb(url : String) {
@@ -146,6 +172,8 @@ class MainActivity : AppCompatActivity() {
         else{
             Log.e("download", "Connexion réseau indisponible.")}
     }
+
+
 }
 
 private operator fun AdapterView.OnItemSelectedListener?.invoke(onItemSelectedListener: AdapterView.OnItemSelectedListener) {
