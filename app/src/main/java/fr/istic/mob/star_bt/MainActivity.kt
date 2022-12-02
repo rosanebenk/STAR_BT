@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         month += 1
         val day: Int = cal.get(Calendar.DAY_OF_MONTH)
         dateFormatBDD = ""+year+monthtoString(month)+daytoString(day)
-        Toast.makeText(this, dateFormatBDD, Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Date sélectionnée : " +dateFormatBDD, Toast.LENGTH_LONG).show()
 
         return makeDateString(day, month, year)
     }
@@ -139,6 +139,9 @@ class MainActivity : AppCompatActivity() {
 
     fun openDatePicker(view: View) {
         datePickerDialog.show()
+
+        //dateFormatBDD = ""+year+monthtoString(month)+daytoString(day)
+        Toast.makeText(this, "Date sélectionnée : " +dateFormatBDD, Toast.LENGTH_LONG).show()
     }
 
     fun popTimePicker(view: View?) {
@@ -152,6 +155,8 @@ class MainActivity : AppCompatActivity() {
                     hour,
                     minute
                 )
+                heureFormatBDD = timeButton?.text.toString()+":00"
+                Toast.makeText(this, "Heure sélectionnée : "+heureFormatBDD, Toast.LENGTH_SHORT).show()
             }
 
         // int style = AlertDialog.THEME_HOLO_DARK;
