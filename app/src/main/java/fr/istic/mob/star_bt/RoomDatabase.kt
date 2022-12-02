@@ -6,12 +6,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [bus_route::class,calendar::class,trip::class], version = 1, exportSchema = false)
+@Database(entities = [bus_route::class,calendar::class,trip::class,stopTime::class,stops::class], version = 1, exportSchema = false)
 public abstract class RoomDatabase : RoomDatabase() {
 
-    abstract fun bus_route_DAO(): bus_route_DAO
-    abstract fun calendar_DAO(): calendar_DAO
-    abstract fun trip_DAO(): trip_DAO
+    abstract fun getRouteDAO(): bus_route_DAO
+    abstract fun getCalendarDAO(): calendar_DAO
+    abstract fun getTripDAO(): trip_DAO
+    abstract fun getStopsTimeDAO(): stop_times_DAO
+    abstract fun getStopsDAO(): stops_DAO
 
 
     companion object {

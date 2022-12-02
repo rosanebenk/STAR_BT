@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        RoomService.context = applicationContext
         setContentView(R.layout.activity_main)
         initDatePicker()
         buttonDate = findViewById(R.id.datePickerButton)

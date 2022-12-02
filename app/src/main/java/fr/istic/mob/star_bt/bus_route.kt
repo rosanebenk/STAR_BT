@@ -1,5 +1,6 @@
 package fr.istic.mob.star_bt
 
+import androidx.annotation.NonNull
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -22,15 +23,14 @@ import androidx.room.PrimaryKey
 
 )
 data class bus_route(
+    @PrimaryKey() var route_id: String,
     val ShortName : String,
     val LongName: String,
     val Description : String,
-    val Type : Int,
-    val Color: Int,
-    val TextColor : Int,
-){
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = null
-}
+    val Type : String,
+    val Color: String,
+    val TextColor : String,
+
+)
 
 

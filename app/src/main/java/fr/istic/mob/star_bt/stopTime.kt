@@ -3,31 +3,30 @@ package fr.istic.mob.star_bt
 import androidx.room.*
 
 @Entity (
-    tableName = "stoptime"
+    tableName = "stoptime",
 
     //FK : trip_id ,stop_id => PK
 
-    /*foreignKeys = arrayOf(
+    foreignKeys = arrayOf(
         ForeignKey(
-            entity = ObjetData::class,
-            parentColumns = arrayOf("id"),
-            childColumns = arrayOf("idObjet1"),
+            entity = trip::class,
+            parentColumns = arrayOf("trip_id"),
+            childColumns = arrayOf("trip_id"),
             onUpdate = ForeignKey.CASCADE,
             onDelete = ForeignKey.CASCADE
         )
     )
 
-     */
+
 
 )
 
 data class stopTime(
+    @PrimaryKey(autoGenerate = true) val stop_time_id : Int,
     val arrival_time : String,
     val departure_time: String,
-    val StopSeq : String,
+    val stopSeq : String,
+    val trip_id : String
 )
-//{
-//    @PrimaryKey(autoGenerate = true)
-//    var trip_id: Int? = null
-//}
+
 

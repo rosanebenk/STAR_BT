@@ -23,13 +23,11 @@ import androidx.room.*
 )
 
 data class stops(
+    @PrimaryKey() var stop_id: String,
     val Stopcode : String,
     val Stopname: String,
     val Stopdesc : String,
-    val Longitude : Long,
-    val Latitude : Long,
-    val Weelchair : Int,
-){
-    @PrimaryKey(autoGenerate = true)
-    var stop_id: Int? = null
-}
+    val Longitude : String,
+    val Latitude : String,
+    val Weelchair : String,
+)

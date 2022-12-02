@@ -8,17 +8,15 @@ import java.util.*
 @Entity(
     tableName = "calendar")
 data class calendar(
+    @PrimaryKey() var service_id: String,
     val StartDate : String,
     val EndDate: String ,
-    val monday : Int,
-    val tuesday : Int,
-    val wednesday: Int,
-    val thursday : Int,
-    val friday : Int,
-    val saturday : Int,
-    val sunday : Int
-){
-    @PrimaryKey(autoGenerate = true)
-    var service_id: Int? = null
-}
+    val monday : String,
+    val tuesday : String,
+    val wednesday: String,
+    val thursday : String,
+    val friday : String,
+    val saturday : String,
+    val sunday : String
+)
 
