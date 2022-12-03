@@ -12,4 +12,10 @@ interface stop_times_DAO {
 
     @Query("DELETE FROM stopTime")
     fun deleteAllObjects()
+
+    @Query("SELECT arrival_time FROM stopTime WHERE trip_id = :tripId and stop_id = :stopId")
+    fun getArrivalTime(tripId: String, stopId: String):List<String>
+
+    @Query("SELECT departure_time FROM stopTime WHERE trip_id = :tripId and stop_id = :stopId")
+    fun getDepartureTime(tripId: String, stopId: String):List<String>
 }

@@ -60,11 +60,12 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                 insertintoDataBase(bufferedReader, file.nameWithoutExtension)
                 println("j'ai inseré "+ file.nameWithoutExtension)
             }
+            println("--------JE SUIS LA---------")
             getRoutesFromDB()
-            //getCalendarFromDB()
-            //getStopsFromDB()
+            getCalendarFromDB()
+            getStopsFromDB()
             //getStopTimesFromDB()
-            //getTripFromDB()
+            getTripFromDB()
 
             //lecture du fichier txt
             //val csvReader = CSVReader(this.activity,File(this.activity.applicationContext.filesDir.toString() + File.separator +"DATA/","calendar.txt"))
@@ -217,9 +218,11 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                     )
                     //this.database.routes().insert(route)
                     RoomService.appDatabase.getRouteDAO().addObjet(route)
+                    /*
                     println("route id : "+ route.route_id+ "/n route color :"+ route.color+"/n route text color :" +route.text_color
                             +"/n route desc :"+route.desc+"/n route long  :"+route.long_name+"/n route short :"+route.short_name)
 
+                     */
 
                 }
                 println("routes saved")
@@ -241,9 +244,12 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                     )
                     //this.database.routes().insert(calendar)
                     RoomService.appDatabase.getCalendarDAO().addObjet(calendar)
+                    /*
                     println("calendar id : "+ calendar.service_id + "\t calendar start day :"+ calendar.start_date+"/n calendar end date :" +calendar.end_date
                             +"\n calendar monday :"+calendar.monday+"\t calendar tuesday  :"+calendar.tuesday+"/n calendar wednesday :"+calendar.wednesday
                             +"\n calendar thursday :"+calendar.thursday+"\n calendar friday :"+calendar.friday+"\n calendar sat :"+calendar.saturday)
+
+                     */
 
 
                 }
@@ -263,14 +269,17 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                     )
                     //this.database.stops().insert(stop)
                     RoomService.appDatabase.getStopsDAO().addObjet(stop)
+                    /*
                     println("stop id : "+ stop.stop_id+ "\t stop code :"+ stop.stop_code+"\t stop name :" +stop.stop_name
                             +"\t stop desc :"+stop.stop_desc+"\t stop lati  :"+stop.stop_lat+"\t stop long :"+stop.stop_lon
                             +"\n stop wheelchair"+ stop.wheelchair)
 
+                     */
 
                 }
                 println("stops saved")
             }
+            /*
             "stop_times" -> {
                 Log.i("StopTimes : ", "insertion")
                 for (csvRecord in csvParser) {
@@ -283,12 +292,17 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                     )
                     //this.database.stopsTimes().insert(stopsTime)
                     RoomService.appDatabase.getStopsTimeDAO().addObjet(stopsTime)
+                    /*
                     println("trip  id : "+ stopsTime.trip_id + "\t stop arrival  :"+stopsTime.arrival_time+"\t stop departure :" +stopsTime.departure_time
                             +"\t stop id :"+stopsTime.stop_id+"\t stop seq  :"+stopsTime.stopSeq )
 
+                     */
                 }
                 println("stops times saved")
+
+
             }
+            */
             "trips" -> {
                 Log.i("trip : ", "insertion")
                 for (csvRecord in csvParser) {
@@ -303,16 +317,20 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                     )
                     //this.database.trips().insert(trip)
                     RoomService.appDatabase.getTripDAO().addObjet(trip)
+                    /*
                     println("trip route  : "+ trip.route_id+ "\t trip srvice id  :"+ trip.service_id+"\t trip id :" +trip.trip_id
                             +"\t trip headsign :"+trip.headsign+"\t trip direction  :"+trip.direction_id+"\t trip blockid :"+trip.blockid
                             +"\n trip wheelchair"+ trip.wheelchairaccessible)
 
+                     */
+                    //println("trip saved")
                 }
-                println("  saved")
+                println("trips  saved")
             }
         }
     }
     private fun getRoutesFromDB() : List<bus_route>{
+        println("--------JE SUIS getRoutesFromDB---------")
         Log.i("Routes : ", "restitution")
         var objets = RoomService.appDatabase.getRouteDAO().getAllObjects()
         for (route in objets){
@@ -320,6 +338,7 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
             println("route id : "+ route.route_id+ "\t route color :"+ route.color+"\t route text color :" +route.text_color
                     +"\t route desc :"+route.desc+"\t route long  :"+route.long_name+"\t route short :"+route.short_name)
         }
+        println("--------JE SUIS getRoutesFromDB FINI---------")
         return objets
     }
     private fun getCalendarFromDB() : List<calendar>{

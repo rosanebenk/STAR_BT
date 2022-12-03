@@ -13,4 +13,13 @@ interface  bus_route_DAO {
 
     @Query("DELETE FROM bus_route")
     fun deleteAllObjects()
+
+    @Query("SELECT short_name FROM bus_route")
+    fun getAllRoutesNames():List<String>
+
+    @Query("SELECT route_id FROM bus_route where short_name = :shortName")
+    fun getRouteIdByName(shortName: String):List<String>
+
+    @Query("SELECT * FROM bus_route where route_id = :routeId")
+    fun getRouteById(routeId: String):List<bus_route>
 }

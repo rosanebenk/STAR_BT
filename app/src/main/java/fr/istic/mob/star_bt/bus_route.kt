@@ -29,7 +29,7 @@ data class bus_route(
     val desc: String,
     val type: String,
     val color: String,
-    val text_color: String,
+    val text_color: String
 
     )
 

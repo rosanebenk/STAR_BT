@@ -9,6 +9,7 @@ import java.util.*
 @Entity(
     tableName = "trip",
     // FK : route_id, service_id
+    /*
     foreignKeys = arrayOf(
         ForeignKey(
             entity = bus_route::class,
@@ -26,6 +27,8 @@ import java.util.*
             onDelete = ForeignKey.CASCADE
         )
     )
+
+     */
 )
 data class trip(
     val route_id :String,
