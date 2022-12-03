@@ -89,8 +89,8 @@ class MainActivity : AppCompatActivity() {
         for (bus in busRoute) {
             var bus = busRoute.first({ it.route_id == bus.route_id })
             println("----------------------------------------------")
-            println(bus.ShortName)
-            lignes += bus.ShortName
+            println(bus.short_name)
+            lignes += bus.short_name
         }
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, lignes)
         spinner_LigneBus.adapter = adapter
