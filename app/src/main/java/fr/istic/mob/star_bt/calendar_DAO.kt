@@ -15,8 +15,9 @@ interface calendar_DAO {
     fun deleteAllObjects()
 
     @Query("SELECT * FROM calendar WHERE start_date = :startDate")
-    fun getAllByDate(startDate: String):List<Calendar>
-
+    fun getAllByDate(startDate: String):List<calendar>
+/*
     @Query("SELECT service_id FROM calendar WHERE start_date = :startDate")
-    fun getServiceId(startDate: String):List<String>
+    fun getServiceId(startDate: String):List<calendar>
+ */
 }

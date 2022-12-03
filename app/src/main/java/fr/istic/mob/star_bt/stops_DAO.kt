@@ -14,11 +14,11 @@ interface stops_DAO {
     fun deleteAllObjects()
 
     @Query("SELECT * FROM stops WHERE stop_id = :stopId")
-    fun getStopById(stopId: String):List<String>
-
+    fun getStopById(stopId: String):List<stops>
+/*
     @Query("SELECT stop_name FROM stops WHERE stop_id = :stopId")
-    fun getStopName(stopId: String):List<String>
-
+    fun getStopName(stopId: String):List<stops>
+*/
     @Query("SELECT * FROM stops WHERE wheelchair = 1")
     fun stopAcceptWheelchair():List<stops>
 

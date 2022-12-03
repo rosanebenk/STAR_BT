@@ -62,6 +62,7 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
             }
             println("--------JE SUIS LA---------")
             getRoutesFromDB()
+            getRoutesNameFromDB()
             getCalendarFromDB()
             getStopsFromDB()
             //getStopTimesFromDB()
@@ -341,6 +342,18 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
         println("--------JE SUIS getRoutesFromDB FINI---------")
         return objets
     }
+
+    private fun getRoutesNameFromDB() : List<String>{
+        println("--------JE SUIS getRoutesNameFromDB----NAME-----")
+        Log.i("Routes : ", "restitution")
+        var objets = RoomService.appDatabase.getRouteDAO().getAllRoutesNames()
+        for (route in objets){
+            println(route)
+        }
+        println("--------JE SUIS getRoutesNameFromDB FINI----NAME-----")
+        return objets
+    }
+
     private fun getCalendarFromDB() : List<calendar>{
         Log.i("Calendar : ", "restitution")
         var objets = RoomService.appDatabase.getCalendarDAO().getAllObjects()

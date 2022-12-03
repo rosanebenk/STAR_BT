@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         downloadFileFromWeb(url)
 
         fun waitForIt() {
-            if (RoomService.appDatabase.getRouteDAO().getAllObjects().isEmpty()) {
+            if (RoomService.appDatabase.getRouteDAO().getAllRoutesNames().isEmpty()) {
                 Handler().postDelayed({
                     waitForIt()
                 }, 1000)
