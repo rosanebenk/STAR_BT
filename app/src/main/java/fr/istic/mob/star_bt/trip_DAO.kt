@@ -11,4 +11,7 @@ interface trip_DAO {
 
     @Query("DELETE FROM trip")
     fun deleteAllObjects()
+
+    @Query("SELECT DISTINCT headsign FROM trip WHERE trip_id = :id" /*and direction = :direction*/)
+    fun getDirection(id: Int /*, direction: Int*/):List<String>
 }
