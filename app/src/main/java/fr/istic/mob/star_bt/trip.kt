@@ -28,11 +28,12 @@ import java.util.*
     )
 )
 data class trip(
-    @PrimaryKey() var trip_id: String,
-    val headsign : String,
-    val direction: String,
-    val blockid : String,
-    val wheelchairaccessible : String,
     val route_id :String,
     val service_id:String,
+    @PrimaryKey() var trip_id: String,
+    val headsign : String,
+    val direction_id: String,
+    val blockid : String,
+    val wheelchairaccessible : String,
+
 )

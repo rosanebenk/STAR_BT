@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.AsyncTask
+import android.util.Log
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import java.io.*
@@ -57,11 +58,13 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
             for(file : File in fichier){
                 val bufferedReader =  file.bufferedReader();
                 insertintoDataBase(bufferedReader, file.nameWithoutExtension)
-                println("j'ai inseré")
-                restitutefromDataBase()
-
-
+                println("j'ai inseré "+ file.nameWithoutExtension)
             }
+            getRoutesFromDB()
+            //getCalendarFromDB()
+            //getStopsFromDB()
+            //getStopTimesFromDB()
+            //getTripFromDB()
 
             //lecture du fichier txt
             //val csvReader = CSVReader(this.activity,File(this.activity.applicationContext.filesDir.toString() + File.separator +"DATA/","calendar.txt"))
@@ -182,6 +185,10 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
 
     private fun insertintoDataBase(buffer : BufferedReader, table : String){
         RoomService.appDatabase.getRouteDAO().deleteAllObjects()
+        RoomService.appDatabase.getStopsDAO().deleteAllObjects()
+        RoomService.appDatabase.getCalendarDAO().deleteAllObjects()
+        RoomService.appDatabase.getTripDAO().deleteAllObjects()
+        RoomService.appDatabase.getStopsTimeDAO().deleteAllObjects()
         //lecture du fichier txt
        // val csvReader = CSVReader(this.activity,File(this.activity.applicationContext.filesDir.toString() + File.separator +"DATA/","calendar.txt"))
 
@@ -197,6 +204,7 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
 
         when (table){
             "routes" -> {
+                Log.i("Route : ", "insertion")
                 for (csvRecord in csvParser) {
                     var route = bus_route(
                         csvRecord.get("route_id"),
@@ -209,23 +217,153 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                     )
                     //this.database.routes().insert(route)
                     RoomService.appDatabase.getRouteDAO().addObjet(route)
-                    println("route id : "+ route.route_id+ "/n route color :"+ route.Color+"/n route text color :" +route.TextColor
-                            +"/n route desc :"+route.Description+"/n route long  :"+route.LongName+"/n route short :"+route.ShortName)
+                    println("route id : "+ route.route_id+ "/n route color :"+ route.color+"/n route text color :" +route.text_color
+                            +"/n route desc :"+route.desc+"/n route long  :"+route.long_name+"/n route short :"+route.short_name)
 
 
                 }
-                println("C BON !")
+                println("routes saved")
+            }
+            "calendar" -> {
+                Log.i("Calendar : ", "insertion")
+                for (csvRecord in csvParser) {
+                    var calendar = calendar(
+                        csvRecord.get("service_id"),
+                        csvRecord.get("monday"),
+                        csvRecord.get("tuesday"),
+                        csvRecord.get("wednesday"),
+                        csvRecord.get("thursday"),
+                        csvRecord.get("friday"),
+                        csvRecord.get("saturday"),
+                        csvRecord.get("sunday"),
+                        csvRecord.get("start_date"),
+                        csvRecord.get("end_date"),
+                    )
+                    //this.database.routes().insert(calendar)
+                    RoomService.appDatabase.getCalendarDAO().addObjet(calendar)
+                    println("calendar id : "+ calendar.service_id + "\t calendar start day :"+ calendar.start_date+"/n calendar end date :" +calendar.end_date
+                            +"\n calendar monday :"+calendar.monday+"\t calendar tuesday  :"+calendar.tuesday+"/n calendar wednesday :"+calendar.wednesday
+                            +"\n calendar thursday :"+calendar.thursday+"\n calendar friday :"+calendar.friday+"\n calendar sat :"+calendar.saturday)
+
+
+                }
+                println("calendar saved")
+            }
+            "stops" -> {
+                Log.i("Stops : ", "insertion")
+                for (csvRecord in csvParser) {
+                    var stop = stops(
+                        csvRecord.get("stop_id"),
+                        csvRecord.get("stop_code"),
+                        csvRecord.get("stop_name"),
+                        csvRecord.get("stop_desc"),
+                        csvRecord.get("stop_lat"),
+                        csvRecord.get("stop_lon"),
+                        csvRecord.get("wheelchair_boarding"),
+                    )
+                    //this.database.stops().insert(stop)
+                    RoomService.appDatabase.getStopsDAO().addObjet(stop)
+                    println("stop id : "+ stop.stop_id+ "\t stop code :"+ stop.stop_code+"\t stop name :" +stop.stop_name
+                            +"\t stop desc :"+stop.stop_desc+"\t stop lati  :"+stop.stop_lat+"\t stop long :"+stop.stop_lon
+                            +"\n stop wheelchair"+ stop.wheelchair)
+
+
+                }
+                println("stops saved")
+            }
+            "stop_times" -> {
+                Log.i("StopTimes : ", "insertion")
+                for (csvRecord in csvParser) {
+                    var stopsTime = stopTime(
+                        csvRecord.get("trip_id"),
+                        csvRecord.get("arrival_time"),
+                        csvRecord.get("departure_time"),
+                        csvRecord.get("stop_id"),
+                        csvRecord.get("stop_sequence"),
+                    )
+                    //this.database.stopsTimes().insert(stopsTime)
+                    RoomService.appDatabase.getStopsTimeDAO().addObjet(stopsTime)
+                    println("trip  id : "+ stopsTime.trip_id + "\t stop arrival  :"+stopsTime.arrival_time+"\t stop departure :" +stopsTime.departure_time
+                            +"\t stop id :"+stopsTime.stop_id+"\t stop seq  :"+stopsTime.stopSeq )
+
+                }
+                println("stops times saved")
+            }
+            "trips" -> {
+                Log.i("trip : ", "insertion")
+                for (csvRecord in csvParser) {
+                    var trip = trip(
+                        csvRecord.get("route_id"),
+                        csvRecord.get("service_id"),
+                        csvRecord.get("trip_id"),
+                        csvRecord.get("trip_headsign"),
+                        csvRecord.get("direction_id"),
+                        csvRecord.get("block_id"),
+                        csvRecord.get("wheelchair_accessible"),
+                    )
+                    //this.database.trips().insert(trip)
+                    RoomService.appDatabase.getTripDAO().addObjet(trip)
+                    println("trip route  : "+ trip.route_id+ "\t trip srvice id  :"+ trip.service_id+"\t trip id :" +trip.trip_id
+                            +"\t trip headsign :"+trip.headsign+"\t trip direction  :"+trip.direction_id+"\t trip blockid :"+trip.blockid
+                            +"\n trip wheelchair"+ trip.wheelchairaccessible)
+
+                }
+                println("  saved")
             }
         }
     }
-    private fun restitutefromDataBase(){
-        println("je restitue")
+    private fun getRoutesFromDB() : List<bus_route>{
+        Log.i("Routes : ", "restitution")
         var objets = RoomService.appDatabase.getRouteDAO().getAllObjects()
         for (route in objets){
             var route = objets.first({ it.route_id == route.route_id })
-            println("route id : "+ route.route_id+ "/n route color :"+ route.Color+"/n route text color :" +route.TextColor
-                    +"/n route desc :"+route.Description+"/n route long  :"+route.LongName+"/n route short :"+route.ShortName)
+            println("route id : "+ route.route_id+ "\t route color :"+ route.color+"\t route text color :" +route.text_color
+                    +"\t route desc :"+route.desc+"\t route long  :"+route.long_name+"\t route short :"+route.short_name)
         }
+        return objets
     }
+    private fun getCalendarFromDB() : List<calendar>{
+        Log.i("Calendar : ", "restitution")
+        var objets = RoomService.appDatabase.getCalendarDAO().getAllObjects()
+        for (calendars in objets){
+            var calendar = objets.first({ it.service_id == calendars.service_id })
+            println("calendar id : "+ calendar.service_id+ "\t calendar monday :"+ calendar.monday+"\t calendar tuesday:" +calendar.tuesday
+                    +"\t calendar start day :"+calendar.start_date+"\t calendar end date   :"+calendar.end_date)
+        }
+        return objets
+    }
+    private fun getStopsFromDB() : List<stops>{
+        Log.i("Stops : ", "restitution")
+        var objets = RoomService.appDatabase.getStopsDAO().getAllObjects()
+        for (stops in objets){
+            var stop = objets.first({ it.stop_id == stops.stop_id })
+            println("stop id : "+ stop.stop_id+ "\t stop code :"+ stop.stop_code+"\t stop name :" +stop.stop_name
+                    +"\t stop desc :"+stop.stop_desc+"\t stop lati  :"+stop.stop_lat+"\t stop long :"+stop.stop_lon
+                    +"\n stop wheelchair"+ stop.wheelchair)
+        }
+        return objets
+    }
+    private fun getStopTimesFromDB() : List<stopTime>{
+        Log.i("StopTimes : ", "restitution")
+        var objets = RoomService.appDatabase.getStopsTimeDAO().getAllObjects()
+        for (stopTime in objets){
+            var stopsTime = objets.first({ it.stop_time_id == stopTime.stop_time_id })
+            println("trip  id : "+ stopsTime.trip_id + "\t stop arrival  :"+stopsTime.arrival_time+"\t stop departure :" +stopsTime.departure_time
+                    +"\t stop id :"+stopsTime.stop_id+"\t stop seq  :"+stopsTime.stopSeq )
+        }
+        return objets
+    }
+    private fun getTripFromDB() : List<trip>{
+        Log.i("Trip : ", "restitution")
+        var objets = RoomService.appDatabase.getTripDAO().getAllObjects()
+        for (trip in objets){
+            var trip = objets.first({ it.trip_id == trip.trip_id})
+            println("trip route  : "+ trip.route_id+ "\t trip srvice id  :"+ trip.service_id+"\t trip id :" +trip.trip_id
+                    +"\t trip headsign :"+trip.headsign+"\t trip direction  :"+trip.direction_id+"\t trip blockid :"+trip.blockid
+                    +"\n trip wheelchair"+ trip.wheelchairaccessible)
+        }
+        return objets
+    }
+
 
 }

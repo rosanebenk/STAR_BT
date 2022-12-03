@@ -24,13 +24,13 @@ import androidx.room.PrimaryKey
 )
 data class bus_route(
     @PrimaryKey() var route_id: String,
-    val ShortName : String,
-    val LongName: String,
-    val Description : String,
-    val Type : String,
-    val Color: String,
-    val TextColor : String,
+    val short_name: String,
+    val long_name: String,
+    val desc: String,
+    val type: String,
+    val color: String,
+    val text_color: String,
 
-)
+    )
 
 
