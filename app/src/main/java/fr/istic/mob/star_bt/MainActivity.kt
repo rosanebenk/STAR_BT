@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
             //println(bus.short_name)
             lignes += bus.short_name
         }
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, lignes)
+        val adapter = SpinAdapter(this, android.R.layout.simple_list_item_1, lignes)
         spinner_LigneBus.adapter = adapter
 
         spinner_LigneBus.onItemSelectedListener(object : AdapterView.OnItemSelectedListener {

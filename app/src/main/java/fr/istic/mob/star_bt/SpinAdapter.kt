@@ -6,17 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import java.util.jar.Attributes.Name
 
 
 class SpinAdapter(
     context: Context, textViewResourceId: Int,
-    values: Array<String>
+    values: List<String>
 ) : ArrayAdapter<String>(context, textViewResourceId, values) {
     // Your sent context
     private val context: Context
 
     // Your custom values for the spinner (User)
-    private val values: Array<String>
+    private val values: List<String>
 
     init {
         this.context = context
@@ -41,10 +42,12 @@ class SpinAdapter(
         // I created a dynamic TextView here, but you can reference your own  custom layout for each spinner item
         val label = super.getView(position, convertView, parent!!) as TextView
         label.setTextColor(Color.BLACK)
-        // Then you can get the current item using the values array (Users array) and the current position
-        // You can NOW reference each method you has created in your bean object (User class)
-        var backgroundColor: String = RoomService.appDatabase.getRouteDAO().getAllRoutesNames()[0]
-        label.setBackgroundColor(Color.parseColor(/* colorString = */ backgroundColor))
+        label.setTextSize(22F)
+        // Récupération des couleurs
+        var backgroundColor: String = RoomService.appDatabase.getRouteDAO().getColorByName(values[position])[0]
+
+       // affichage des couleurs
+        label.setBackgroundColor(Color.parseColor("#"+backgroundColor))
         // And finally return your dynamic (or custom) view for each spinner item
         return label
     }
@@ -57,8 +60,8 @@ class SpinAdapter(
     ): View {
         val label = super.getDropDownView(position, convertView, parent) as TextView
         label.setTextColor(Color.BLACK)
-        var backgroundColor: String = RoomService.appDatabase.getRouteDAO().getAllRoutesNames()[0]
-        label.setBackgroundColor(Color.parseColor(/* colorString = */ backgroundColor))
+        var backgroundColor: String = RoomService.appDatabase.getRouteDAO().getColorByName(values[position])[0]
+        label.setBackgroundColor(Color.parseColor("#"+backgroundColor))
         return label
     }
 }
