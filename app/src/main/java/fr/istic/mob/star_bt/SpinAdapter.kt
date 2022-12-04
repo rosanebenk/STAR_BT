@@ -41,7 +41,10 @@ class SpinAdapter(
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         // I created a dynamic TextView here, but you can reference your own  custom layout for each spinner item
         val label = super.getView(position, convertView, parent!!) as TextView
-        label.setTextColor(Color.BLACK)
+        var textColor: String = RoomService.appDatabase.getRouteDAO().getTextColorByName(values[position])[0]
+
+        //label.setTextColor(Color.BLACK)
+        label.setTextColor(Color.parseColor("#"+textColor))
         label.setTextSize(22F)
         // Récupération des couleurs
         var backgroundColor: String = RoomService.appDatabase.getRouteDAO().getColorByName(values[position])[0]
@@ -59,7 +62,10 @@ class SpinAdapter(
         parent: ViewGroup?
     ): View {
         val label = super.getDropDownView(position, convertView, parent) as TextView
-        label.setTextColor(Color.BLACK)
+        var textColor: String = RoomService.appDatabase.getRouteDAO().getTextColorByName(values[position])[0]
+
+        //label.setTextColor(Color.BLACK)
+        label.setTextColor(Color.parseColor("#"+textColor))
         var backgroundColor: String = RoomService.appDatabase.getRouteDAO().getColorByName(values[position])[0]
         label.setBackgroundColor(Color.parseColor("#"+backgroundColor))
         return label
