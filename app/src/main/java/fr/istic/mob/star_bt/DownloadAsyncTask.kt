@@ -29,7 +29,7 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
         this.besoin.add("trips.txt")
     }
     override fun onPreExecute() {
-        dialog.setMessage("Download in progress")
+        dialog.setMessage("Download in progress, \nDue to big files, it may takes 15 mins")
         dialog.show()
     }
     override fun doInBackground(vararg params: String):ByteArray? {
@@ -38,7 +38,7 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
     override fun onProgressUpdate(vararg values: Int?){}
 
     override fun onPostExecute(result: ByteArray) {
-        if(dialog.isShowing) { dialog.dismiss() }
+
         try{
             val outputStream = activity.openFileOutput(file, Context.MODE_PRIVATE)
             outputStream.write(result)
@@ -90,6 +90,7 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
 //                }
 
         }catch(e: IOException) { e.printStackTrace() }
+        if(dialog.isShowing) { dialog.dismiss() }
     }
     private fun downloadUrl(myurl: String): ByteArray? {
         var open: DataInputStream? = null

@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity() {
 
         //pour tester si c'est la 1ère exe de l'app
         prefs = getSharedPreferences("fr.istic.mob.star_bt", MODE_PRIVATE);
-
         isPaused = true
        // downloadFileFromWeb(url)
 
