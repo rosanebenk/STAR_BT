@@ -55,16 +55,6 @@ class DownloadJsonAsyncTask (activity: Activity, fileName: String) : AsyncTask<S
             println(resultString)
 
 
-
-            val gson = GsonBuilder()
-                .setLenient()
-                .create()
-
-            /*val retrofit: Retrofit = Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build()
-*/
             // Conversion du String en Json
             val jsonParser = JsonParser()
             val jsonArrayOutput: JsonArray = jsonParser.parse(

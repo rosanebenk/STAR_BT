@@ -71,7 +71,7 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
             getCalendarFromDB()
             getStopsFromDB()
             getTripFromDB()
-            getStopTimesFromDB()
+            //getStopTimesFromDB()
 
             //lecture du fichier txt
             //val csvReader = CSVReader(this.activity,File(this.activity.applicationContext.filesDir.toString() + File.separator +"DATA/","calendar.txt"))
@@ -281,7 +281,7 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                 }
                 println("stops saved")
             }
-
+/*
             "stop_times" -> {
                 Log.i("StopTimes : ", "insertion")
                 for (csvRecord in csvParser) {
@@ -304,6 +304,7 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
 
 
             }
+ */
 
             "trips" -> {
                 Log.i("trip : ", "insertion")
@@ -376,6 +377,7 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
 //        }
         return objets
     }
+    /*
     private fun getStopTimesFromDB() : List<stopTime>{
         Log.i("StopTimes : ", "restitution")
         var objets = RoomService.appDatabase.getStopsTimeDAO().getAllObjects()
@@ -387,6 +389,7 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
 //        }
         return objets
     }
+     */
     private fun getTripFromDB() : List<trip>{
         Log.i("Trip : ", "restitution")
         var objets = RoomService.appDatabase.getTripDAO().getAllObjects()
