@@ -13,7 +13,9 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import java.util.*
+import kotlin.io.path.createTempDirectory
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     var prefs: SharedPreferences? = null
 
     lateinit var spinner_LigneBus: Spinner
+    lateinit var spinner_DirectionBus: Spinner
 
     //lateinit var listeLignesBus:
     lateinit var datePickerDialog: DatePickerDialog
@@ -34,6 +37,12 @@ class MainActivity : AppCompatActivity() {
     var minute: Int = 0
     var isPaused: Boolean = false
     var lignes = listOf<String>()
+    var listeDirections = listOf<String>()
+
+    public var selectedItemLigneBus:String = "C1"
+    public var selectedItemDirection: String = ""
+    public var idLigneBus:String = ""
+
     private var url =
         "https://eu.ftp.opendatasoft.com/star/gtfs/GTFS_2022.3.3.0_20221128_20221218.zip"
 
@@ -50,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         buttonDate.text = getTodaysDate()
         timeButton = findViewById(R.id.timeButton)
         spinner_LigneBus = findViewById(R.id.spinner_LigneBus)
+        spinner_DirectionBus = findViewById(R.id.spinner_Direction)
 
         //pour tester si c'est la 1ère exe de l'app
         prefs = getSharedPreferences("fr.istic.mob.star_bt", MODE_PRIVATE);
@@ -67,17 +77,11 @@ class MainActivity : AppCompatActivity() {
                 //setTimeout(fun() { waitForIt() }, 100);
             } else {
                 alimenterSpinnerListeBus(spinner_LigneBus)
+                alimenterSpinnerDirectionBus(spinner_DirectionBus)
 
             }
         }
         waitForIt()
-
-        println("-------------------------------------------------------------------------------------------------")
-        println("-------------------------------------------------------------------------------------------------")
-        println("-------------------------------------------------------------------------------------------------")
-
-
-
 
     }
     override fun onResume() {
@@ -110,26 +114,52 @@ class MainActivity : AppCompatActivity() {
         }
         val adapter = SpinAdapter(this, android.R.layout.simple_list_item_1, lignes)
         spinner_LigneBus.adapter = adapter
+        //var busSelected: String = spinner_LigneBus.selectedItem.toString()
 
-        spinner_LigneBus.onItemSelectedListener(object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                TODO("Not yet implemented")
-                //spinner_LigneBus.
-                onItemSelected(parent, view, position, id)
-                /*val selectedItem = spinner_LigneBus[position]
-                Toast.makeText(, "selectedItem : $selectedItem", Toast.LENGTH_LONG)
-*/
+        spinner_LigneBus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                Toast.makeText(this@MainActivity, "Ligne sélectionnée : $selectedItemLigneBus", Toast.LENGTH_LONG).show()
             }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                //onItemSelected(parent, view, position, id)
+                selectedItemLigneBus = parent?.getItemAtPosition(position).toString()
+                println(selectedItemLigneBus)
+                Toast.makeText(this@MainActivity, "Ligne sélectionnée : $selectedItemLigneBus", Toast.LENGTH_LONG).show()
+                alimenterSpinnerDirectionBus(spinner_DirectionBus)
             }
-        })
+        }
+    }
+
+    fun alimenterSpinnerDirectionBus(spinnerDirectionBus: Spinner?) {
+        idLigneBus = RoomService.appDatabase.getRouteDAO().getRouteIdByName(selectedItemLigneBus)[0].toString()
+        println(idLigneBus)
+        //var directions = RoomService.appDatabase.getTripDAO().getDirection(idLigneBus)
+        println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+        //println(directions)
+        var directions = RoomService.appDatabase.getTripDAO().getDirections(idLigneBus)
+        listeDirections = listOf<String>()
+        for(direction in directions){
+            //if(direction.route_id == idLigneBus){
+            listeDirections += direction
+            println(direction)
+            //}
+        }
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, listeDirections)
+        spinner_DirectionBus.adapter = adapter
+
+        spinner_DirectionBus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                Toast.makeText(this@MainActivity, "Direction sélectionnée : $selectedItemDirection", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                //onItemSelected(parent, view, position, id)
+                selectedItemDirection = parent?.getItemAtPosition(position).toString()
+                println(selectedItemDirection)
+                Toast.makeText(this@MainActivity, "Direction sélectionnée : $selectedItemDirection", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun getTodaysDate(): String {
@@ -313,10 +343,5 @@ class MainActivity : AppCompatActivity() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
-
-}
-
-private operator fun AdapterView.OnItemSelectedListener?.invoke(onItemSelectedListener: AdapterView.OnItemSelectedListener) {
-    //ODO("Not yet implemented")
 
 }

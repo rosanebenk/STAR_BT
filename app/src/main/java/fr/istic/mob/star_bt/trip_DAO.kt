@@ -15,6 +15,9 @@ interface trip_DAO {
     @Query("SELECT DISTINCT headsign FROM trip WHERE route_id = :id" /*and direction = :direction*/)
     fun getDirections(id: String /*, direction: Int*/):List<String>
 
+    @Query("SELECT DISTINCT * FROM trip WHERE route_id = :id" /*and direction = :direction*/)
+    fun getDirectionsV2(id: String /*, direction: Int*/):List<trip>
+
     @Query("SELECT DISTINCT headsign FROM trip WHERE trip_id = :id" /*and direction = :direction*/)
     fun getDirection(id: String /*, direction: Int*/):List<String>
 

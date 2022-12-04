@@ -85,14 +85,14 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.517" />
+        app:layout_constraintVertical_bias="0.514" />
 
     <Spinner
         android:id="@+id/spinner_Direction"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="472dp"
+        android:layout_marginTop="456dp"
         android:layout_marginEnd="16dp"
         android:minHeight="48dp"
         android:spinnerMode="dropdown"
@@ -107,7 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="432dp"
+        android:layout_marginTop="416dp"
         android:text="@string/titre_direction"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
