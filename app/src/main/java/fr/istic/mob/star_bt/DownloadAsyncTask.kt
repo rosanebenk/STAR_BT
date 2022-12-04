@@ -55,6 +55,11 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                     fichier.add(it)
             }
             //var csv = CSVParser()
+            RoomService.appDatabase.getRouteDAO().deleteAllObjects()
+            RoomService.appDatabase.getStopsDAO().deleteAllObjects()
+            RoomService.appDatabase.getCalendarDAO().deleteAllObjects()
+            RoomService.appDatabase.getTripDAO().deleteAllObjects()
+            RoomService.appDatabase.getStopsTimeDAO().deleteAllObjects()
             for(file : File in fichier){
                 val bufferedReader =  file.bufferedReader();
                 insertintoDataBase(bufferedReader, file.nameWithoutExtension)
@@ -186,11 +191,7 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
     }
 
     private fun insertintoDataBase(buffer : BufferedReader, table : String){
-        RoomService.appDatabase.getRouteDAO().deleteAllObjects()
-        RoomService.appDatabase.getStopsDAO().deleteAllObjects()
-        RoomService.appDatabase.getCalendarDAO().deleteAllObjects()
-        RoomService.appDatabase.getTripDAO().deleteAllObjects()
-        RoomService.appDatabase.getStopsTimeDAO().deleteAllObjects()
+
         //lecture du fichier txt
        // val csvReader = CSVReader(this.activity,File(this.activity.applicationContext.filesDir.toString() + File.separator +"DATA/","calendar.txt"))
 
