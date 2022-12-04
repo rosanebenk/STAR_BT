@@ -116,9 +116,11 @@ class MainActivity : AppCompatActivity() {
         spinner_LigneBus.adapter = adapter
         //var busSelected: String = spinner_LigneBus.selectedItem.toString()
 
+
         spinner_LigneBus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 Toast.makeText(this@MainActivity, "Ligne sélectionnée : $selectedItemLigneBus", Toast.LENGTH_LONG).show()
+
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -135,7 +137,6 @@ class MainActivity : AppCompatActivity() {
         idLigneBus = RoomService.appDatabase.getRouteDAO().getRouteIdByName(selectedItemLigneBus)[0].toString()
         println(idLigneBus)
         //var directions = RoomService.appDatabase.getTripDAO().getDirection(idLigneBus)
-        println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
         //println(directions)
         var directions = RoomService.appDatabase.getTripDAO().getDirections(idLigneBus)
         listeDirections = listOf<String>()
