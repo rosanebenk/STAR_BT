@@ -23,6 +23,9 @@ interface  bus_route_DAO {
     @Query("SELECT color FROM bus_route where short_name = :shortName")
     fun getColorByName(shortName: String):List<String>
 
+    @Query("SELECT text_color FROM bus_route where short_name = :shortName")
+    fun getTextColorByName(shortName: String):List<String>
+
     @Query("SELECT * FROM bus_route where route_id = :routeId")
     fun getRouteById(routeId: String):List<bus_route>
 }
