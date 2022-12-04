@@ -119,8 +119,9 @@ class MainActivity : AppCompatActivity() {
                 id: Long
             ) {
                 TODO("Not yet implemented")
-                //spinner_LigneBus.
+
                 onItemSelected(parent, view, position, id)
+                println(spinner_LigneBus.selectedItemId.toString())
                 /*val selectedItem = spinner_LigneBus[position]
                 Toast.makeText(, "selectedItem : $selectedItem", Toast.LENGTH_LONG)
 */
