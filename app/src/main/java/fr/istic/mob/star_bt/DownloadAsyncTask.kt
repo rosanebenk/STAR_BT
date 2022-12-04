@@ -70,8 +70,8 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
             getRoutesNameFromDB()
             getCalendarFromDB()
             getStopsFromDB()
-            //getStopTimesFromDB()
             getTripFromDB()
+            getStopTimesFromDB()
 
             //lecture du fichier txt
             //val csvReader = CSVReader(this.activity,File(this.activity.applicationContext.filesDir.toString() + File.separator +"DATA/","calendar.txt"))
@@ -281,7 +281,7 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                 }
                 println("stops saved")
             }
-            /*
+
             "stop_times" -> {
                 Log.i("StopTimes : ", "insertion")
                 for (csvRecord in csvParser) {
@@ -304,7 +304,7 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
 
 
             }
-            */
+
             "trips" -> {
                 Log.i("trip : ", "insertion")
                 for (csvRecord in csvParser) {
@@ -335,11 +335,11 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
         println("--------JE SUIS getRoutesFromDB---------")
         Log.i("Routes : ", "restitution")
         var objets = RoomService.appDatabase.getRouteDAO().getAllObjects()
-        for (route in objets){
-            var route = objets.first({ it.route_id == route.route_id })
-            println("route id : "+ route.route_id+ "\t route color :"+ route.color+"\t route text color :" +route.text_color
-                    +"\t route desc :"+route.desc+"\t route long  :"+route.long_name+"\t route short :"+route.short_name)
-        }
+//        for (route in objets){
+//            var route = objets.first({ it.route_id == route.route_id })
+//            println("route id : "+ route.route_id+ "\t route color :"+ route.color+"\t route text color :" +route.text_color
+//                    +"\t route desc :"+route.desc+"\t route long  :"+route.long_name+"\t route short :"+route.short_name)
+//        }
         println("--------JE SUIS getRoutesFromDB FINI---------")
         return objets
     }
@@ -348,9 +348,9 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
         println("--------JE SUIS getRoutesNameFromDB----NAME-----")
         Log.i("Routes : ", "restitution")
         var objets = RoomService.appDatabase.getRouteDAO().getAllRoutesNames()
-        for (route in objets){
-            println(route)
-        }
+//        for (route in objets){
+//            println(route)
+//        }
         println("--------JE SUIS getRoutesNameFromDB FINI----NAME-----")
         return objets
     }
@@ -358,43 +358,46 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
     private fun getCalendarFromDB() : List<calendar>{
         Log.i("Calendar : ", "restitution")
         var objets = RoomService.appDatabase.getCalendarDAO().getAllObjects()
-        for (calendars in objets){
-            var calendar = objets.first({ it.service_id == calendars.service_id })
-            println("calendar id : "+ calendar.service_id+ "\t calendar monday :"+ calendar.monday+"\t calendar tuesday:" +calendar.tuesday
-                    +"\t calendar start day :"+calendar.start_date+"\t calendar end date   :"+calendar.end_date)
-        }
+//        for (calendars in objets){
+//            var calendar = objets.first({ it.service_id == calendars.service_id })
+//            println("calendar id : "+ calendar.service_id+ "\t calendar monday :"+ calendar.monday+"\t calendar tuesday:" +calendar.tuesday
+//                    +"\t calendar start day :"+calendar.start_date+"\t calendar end date   :"+calendar.end_date)
+//        }
         return objets
     }
     private fun getStopsFromDB() : List<stops>{
         Log.i("Stops : ", "restitution")
         var objets = RoomService.appDatabase.getStopsDAO().getAllObjects()
-        for (stops in objets){
-            var stop = objets.first({ it.stop_id == stops.stop_id })
-            println("stop id : "+ stop.stop_id+ "\t stop code :"+ stop.stop_code+"\t stop name :" +stop.stop_name
-                    +"\t stop desc :"+stop.stop_desc+"\t stop lati  :"+stop.stop_lat+"\t stop long :"+stop.stop_lon
-                    +"\n stop wheelchair"+ stop.wheelchair)
-        }
+//        for (stops in objets){
+//            var stop = objets.first({ it.stop_id == stops.stop_id })
+//            println("stop id : "+ stop.stop_id+ "\t stop code :"+ stop.stop_code+"\t stop name :" +stop.stop_name
+//                    +"\t stop desc :"+stop.stop_desc+"\t stop lati  :"+stop.stop_lat+"\t stop long :"+stop.stop_lon
+//                    +"\n stop wheelchair"+ stop.wheelchair)
+//        }
         return objets
     }
     private fun getStopTimesFromDB() : List<stopTime>{
         Log.i("StopTimes : ", "restitution")
         var objets = RoomService.appDatabase.getStopsTimeDAO().getAllObjects()
-        for (stopTime in objets){
-            var stopsTime = objets.first({ it.stop_time_id == stopTime.stop_time_id })
-            println("trip  id : "+ stopsTime.trip_id + "\t stop arrival  :"+stopsTime.arrival_time+"\t stop departure :" +stopsTime.departure_time
-                    +"\t stop id :"+stopsTime.stop_id+"\t stop seq  :"+stopsTime.stopSeq )
-        }
+//        for (stopTime in objets){
+//            var stopsTime = objets.first({ it.stop_time_id == stopTime.stop_time_id })
+//            println("trip  id : "+ stopsTime.trip_id + "\t stop arrival  :"+stopsTime.arrival_time+"\t stop departure :" +stopsTime.departure_time
+//                    +"\t stop id :"+stopsTime.stop_id+"\t stop seq  :"+stopsTime.stopSeq )
+//
+//        }
+        println(objets.get(10))
         return objets
     }
     private fun getTripFromDB() : List<trip>{
         Log.i("Trip : ", "restitution")
         var objets = RoomService.appDatabase.getTripDAO().getAllObjects()
-        for (trip in objets){
-            var trip = objets.first({ it.trip_id == trip.trip_id})
-            println("trip route  : "+ trip.route_id+ "\t trip srvice id  :"+ trip.service_id+"\t trip id :" +trip.trip_id
-                    +"\t trip headsign :"+trip.headsign+"\t trip direction  :"+trip.direction_id+"\t trip blockid :"+trip.blockid
-                    +"\n trip wheelchair"+ trip.wheelchairaccessible)
-        }
+//        for (trip in objets){
+//            var trip = objets.first({ it.trip_id == trip.trip_id})
+//            println("trip route  : "+ trip.route_id+ "\t trip srvice id  :"+ trip.service_id+"\t trip id :" +trip.trip_id
+//                    +"\t trip headsign :"+trip.headsign+"\t trip direction  :"+trip.direction_id+"\t trip blockid :"+trip.blockid
+//                    +"\n trip wheelchair"+ trip.wheelchairaccessible)
+//            println(trip)
+//        }
         return objets
     }
 
