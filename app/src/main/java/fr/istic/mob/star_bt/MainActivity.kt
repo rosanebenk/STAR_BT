@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
     var dayString: String = ""
     var hour: Int = 0
     var minute: Int = 0
-    var isPaused: Boolean = false
     var lignes = listOf<String>()
     var listeDirections = listOf<String>()
 
@@ -51,28 +50,33 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //set database
         RoomService.context = applicationContext
         setContentView(R.layout.activity_main)
+        //création du channel de notification
         createNotificationChannel()
+        //Initialisation du spinner de date et récupération des autres spinner
         initDatePicker()
         buttonDate = findViewById(R.id.datePickerButton)
         buttonDate.text = getTodaysDate()
+
         timeButton = findViewById(R.id.timeButton)
         spinner_LigneBus = findViewById(R.id.spinner_LigneBus)
         spinner_DirectionBus = findViewById(R.id.spinner_Direction)
 
         //pour tester si c'est la 1ère exe de l'app
         prefs = getSharedPreferences("fr.istic.mob.star_bt", MODE_PRIVATE);
-        isPaused = true
        // downloadFileFromWeb(url)
 
+        // Fonction qui attend que la base soit remplie pour remplir les spinner de sélection de ligne et de direction
+        //Comme la base se remplie de manière insynchrone, on peut attendre le temps que la base se remplie
         fun waitForIt() {
             if (RoomService.appDatabase.getRouteDAO().getAllRoutesNames().isEmpty()) {
                 Handler().postDelayed({
                     waitForIt()
                 }, 1000)
                 println("------------J'ATTEND------------")
-                var busRoute = RoomService.appDatabase.getRouteDAO().getAllObjects()
+                //var busRoute = RoomService.appDatabase.getRouteDAO().getAllObjects()
                 //println(busRoute)
                 //setTimeout(fun() { waitForIt() }, 100);
             } else {
@@ -100,6 +104,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Alimente le spinner des lignes de bus avec les lignes de bus présentent dans la base
+     * Et défini les réactions à adopter en fonction de l'action utilisateur
+     */
     fun alimenterSpinnerListeBus(spinnerLignebus: Spinner?) {
         //val busRoute: Array<bus_route> = bus_route_DAO.getAllObjects()
         var busRoute = RoomService.appDatabase.getRouteDAO().getAllObjects()
@@ -108,8 +116,6 @@ class MainActivity : AppCompatActivity() {
         //On ajoute les lignes de bus dans une liste
         for (bus in busRoute) {
             var bus = busRoute.first({ it.route_id == bus.route_id })
-            //println("----------------------------------------------")
-            //println(bus.short_name)
             lignes += bus.short_name
         }
         val adapter = SpinAdapter(this, android.R.layout.simple_list_item_1, lignes)
@@ -128,11 +134,16 @@ class MainActivity : AppCompatActivity() {
                 selectedItemLigneBus = parent?.getItemAtPosition(position).toString()
                 println(selectedItemLigneBus)
                 Toast.makeText(this@MainActivity, "Ligne sélectionnée : $selectedItemLigneBus", Toast.LENGTH_LONG).show()
+                //Changement de sélection de la ligne de bus donc appel au renouvellement des données du spinner des directions
                 alimenterSpinnerDirectionBus(spinner_DirectionBus)
             }
         }
     }
 
+    /**
+     * Alimente le spinner des directions avec les terminus de la ligne sélectionnée avec le spinner spinner_LigneBus
+     * Et défini les réactions à adopter en fonction de l'action utilisateur
+     */
     fun alimenterSpinnerDirectionBus(spinnerDirectionBus: Spinner?) {
         idLigneBus = RoomService.appDatabase.getRouteDAO().getRouteIdByName(selectedItemLigneBus)[0].toString()
         println(idLigneBus)
@@ -163,6 +174,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Retourne la date du jour
+     * Utilisé pour le spinner de date
+     */
     private fun getTodaysDate(): String {
         val cal: Calendar = Calendar.getInstance()
         val year: Int = cal.get(Calendar.YEAR)
@@ -175,6 +190,9 @@ class MainActivity : AppCompatActivity() {
         return makeDateString(day, month, year)
     }
 
+    /**
+     * Initialise le spinner de date
+     */
     private fun initDatePicker() {
         val dateSetListener =
             OnDateSetListener { datePicker, year, month, day ->
@@ -195,11 +213,17 @@ class MainActivity : AppCompatActivity() {
         datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
     }
 
+    /**
+     * Reformate le format de la date sélectionnée dans le spinner
+     */
     private fun makeDateString(day: Int, month: Int, year: Int): String {
         dateFormatBDD = "" + year + monthtoString(month) + daytoString(day)
         return "" + day + " " + getMonthFormat(month) + " " + year
     }
 
+    /**
+     * Retourne un format de date (mois) compréhensible par l'utilisateur
+     */
     private fun getMonthFormat(month: Int): String {
         if (month == 1) return resources.getString(R.string.JAN)
         if (month == 2) return resources.getString(R.string.FEB)
@@ -215,6 +239,10 @@ class MainActivity : AppCompatActivity() {
         return if (month == 12) resources.getString(R.string.DEC) else resources.getString(R.string.JAN)
     }
 
+    /**
+     * Change le format du mois de Int à String
+     * @param month un Int
+     */
     private fun monthtoString(month: Int): String {
         monthString = if (month in 1..9) {
             "0$month"
@@ -224,6 +252,10 @@ class MainActivity : AppCompatActivity() {
         return monthString
     }
 
+    /**
+     * Change le format du mois de Int à String
+     * @param day un Int
+     */
     private fun daytoString(day: Int): String {
         dayString = if (day in 1..9) {
             "0$day"
@@ -233,6 +265,9 @@ class MainActivity : AppCompatActivity() {
         return dayString
     }
 
+    /**
+     * Ouvre la pop up avec le spinner de date
+     */
     fun openDatePicker(view: View) {
         datePickerDialog.show()
 
@@ -240,6 +275,10 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "Date sélectionnée : " + dateFormatBDD, Toast.LENGTH_LONG).show()
     }
 
+    /**
+     * Ouvre la pop up avec le "spinner" de l'heure
+     * Et reformate la sélection de l'utilisateur dans la variable @heureFormatBDD
+     */
     fun popTimePicker(view: View?) {
         val onTimeSetListener =
             OnTimeSetListener { timePicker, selectedHour, selectedMinute ->
@@ -264,8 +303,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Télécharge le fichier zip disponible sur le lien
+     * @param url le lien pour télécharger le fichier zip
+     */
     fun downloadFileFromWeb(url: String) {
-        //isPaused = true
         val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connMgr.activeNetworkInfo
         /*6*il faut tester d’abord la connexion internet7*/
@@ -276,8 +318,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Télécharge le fichier json contenant les liens vers les autres fichiers zip disponible
+     * @param urlJson le lien pour télécharger le fichier json
+     */
     fun getJsonWithLinkToZipFile(urlJson: String) {
-        //isPaused = true
         val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connMgr.activeNetworkInfo
         /*6*il faut tester d’abord la connexion internet7*/
@@ -335,6 +380,9 @@ class MainActivity : AppCompatActivity() {
          */
     }
 
+    /**
+     * Crée un channel de notification
+     */
     private fun createNotificationChannel() {
         val name = "STAR_BT"
         val desc = "Notification de la STAR"
