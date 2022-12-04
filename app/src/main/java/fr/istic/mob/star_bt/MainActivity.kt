@@ -39,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     var lignes = listOf<String>()
     private var url =
         "https://eu.ftp.opendatasoft.com/star/gtfs/GTFS_2022.3.3.0_20221128_20221218.zip"
+
+    private val urlJson = "https://data.explore.star.fr/explore/dataset/tco-busmetro-horaires-gtfs-versions-td/download/?format=json&timezone=Europe/Berlin&lang=fr"
     //private var filePath = "src/resources/myfile.txt"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +78,8 @@ class MainActivity : AppCompatActivity() {
         println("-------------------------------------------------------------------------------------------------")
         println("-------------------------------------------------------------------------------------------------")
         println("-------------------------------------------------------------------------------------------------")
+
+
 
 
     }
@@ -229,9 +233,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun getJsonWithLinkToZipFile(urlJson: String) {
+        //isPaused = true
+        val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connMgr.activeNetworkInfo
+        /*6*il faut tester d’abord la connexion internet7*/
+        if (networkInfo != null && networkInfo.isConnected) {
+            DownloadJsonAsyncTask(this, "file.json").execute(url)
+        } else {
+            Log.e("download", "Connexion réseau indisponible.")
+        }
+    }
+
     //Envoie une notification
     //A faire : vérifier si un nouvau fichier est dispo. Si c'est le cas, lancer son téléchargement
     fun refreshData(view: View?) {
+        getJsonWithLinkToZipFile(urlJson)
+
         val intent = Intent(applicationContext, Notification::class.java)
         val title = "Informations : Actualisation de l'app"
         val message = "Un nouveau fichier est-il disponible ? Relancer l'app pour le savoir"
