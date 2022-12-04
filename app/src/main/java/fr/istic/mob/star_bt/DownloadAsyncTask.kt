@@ -65,9 +65,9 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                 insertintoDataBase(bufferedReader, file.nameWithoutExtension)
                 println("j'ai inseré "+ file.nameWithoutExtension)
             }
-            println("--------JE SUIS LA---------")
+            println("--------JE VAIS RESTITUER---------")
             getRoutesFromDB()
-            getRoutesNameFromDB()
+            //getRoutesNameFromDB()
             getCalendarFromDB()
             getStopsFromDB()
             getTripFromDB()
@@ -385,7 +385,6 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
 //                    +"\t stop id :"+stopsTime.stop_id+"\t stop seq  :"+stopsTime.stopSeq )
 //
 //        }
-        println(objets.get(10))
         return objets
     }
     private fun getTripFromDB() : List<trip>{

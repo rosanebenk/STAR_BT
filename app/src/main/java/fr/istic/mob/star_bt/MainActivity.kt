@@ -5,23 +5,20 @@ import android.app.DatePickerDialog.OnDateSetListener
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
-import kotlinx.coroutines.*
-import java.io.*
 import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
 
-    //private lateinit var binding : ActivityMainBinding
+    var prefs: SharedPreferences? = null
 
     lateinit var spinner_LigneBus: Spinner
 
@@ -54,9 +51,11 @@ class MainActivity : AppCompatActivity() {
         timeButton = findViewById(R.id.timeButton)
         spinner_LigneBus = findViewById(R.id.spinner_LigneBus)
 
-        //GlobalScope.async {
+        //pour tester si c'est la 1ère exe de l'app
+        prefs = getSharedPreferences("fr.istic.mob.star_bt", MODE_PRIVATE);
+
         isPaused = true
-        downloadFileFromWeb(url)
+       // downloadFileFromWeb(url)
 
         fun waitForIt() {
             if (RoomService.appDatabase.getRouteDAO().getAllRoutesNames().isEmpty()) {
@@ -65,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                 }, 1000)
                 println("------------J'ATTEND------------")
                 var busRoute = RoomService.appDatabase.getRouteDAO().getAllObjects()
-                println(busRoute)
+                //println(busRoute)
                 //setTimeout(fun() { waitForIt() }, 100);
             } else {
                 alimenterSpinnerListeBus(spinner_LigneBus)
@@ -73,7 +72,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         waitForIt()
-        //}
 
         println("-------------------------------------------------------------------------------------------------")
         println("-------------------------------------------------------------------------------------------------")
@@ -83,17 +81,32 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+    override fun onResume() {
+        super.onResume()
+        Log.i("Preferences","je teste si c'est la 1 ere exe ?")
+        if (prefs!!.getBoolean("firstrun", true)) {
+            println(prefs)
+            // Do first run stuff here then set 'firstrun' as false
+            // using the following line to edit/commit prefs
+            downloadFileFromWeb(url)
+            prefs!!.edit().putBoolean("firstrun", false).commit()
+            println("c'etait la 1ere exe :")
+        }
+        else {
+            Log.i("Preferences : ","c'est pas la premier exe, c'est trop là!!! ")
+        }
+    }
 
     fun alimenterSpinnerListeBus(spinnerLignebus: Spinner?) {
         //val busRoute: Array<bus_route> = bus_route_DAO.getAllObjects()
         var busRoute = RoomService.appDatabase.getRouteDAO().getAllObjects()
-        println(busRoute)
+       // println(busRoute)
         //var lignes = arrayOf("Tests","Test2")
         //On ajoute les lignes de bus dans une liste
         for (bus in busRoute) {
             var bus = busRoute.first({ it.route_id == bus.route_id })
-            println("----------------------------------------------")
-            println(bus.short_name)
+            //println("----------------------------------------------")
+            //println(bus.short_name)
             lignes += bus.short_name
         }
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, lignes)
@@ -292,8 +305,7 @@ class MainActivity : AppCompatActivity() {
          */
     }
 
-    private fun createNotificationChannel()
-    {
+    private fun createNotificationChannel() {
         val name = "STAR_BT"
         val desc = "Notification de la STAR"
         val importance = NotificationManager.IMPORTANCE_DEFAULT
