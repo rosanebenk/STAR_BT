@@ -23,7 +23,7 @@ class FirstFragment : Fragment() {
     //lateinit var listeLignesBus:
     lateinit var datePickerDialog: DatePickerDialog
     lateinit var buttonDate: Button
-    var timeButton: Button? = null
+    lateinit var timeButton: Button
     var dateFormatBDD: String = ""
     var heureFormatBDD: String = ""
     var monthString: String = ""
@@ -52,8 +52,17 @@ class FirstFragment : Fragment() {
         alimenterSpinnerListeBus(spinner_LigneBus)
         alimenterSpinnerDirectionBus(spinner_DirectionBus)
 
+        timeButton.setOnClickListener {
+            popTimePicker(it)
+        }
+        buttonDate.setOnClickListener {
+            openDatePicker(it)
+        }
+
         return view
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
