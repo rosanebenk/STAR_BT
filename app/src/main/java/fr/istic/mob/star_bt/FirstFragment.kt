@@ -5,7 +5,6 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +23,7 @@ class FirstFragment : Fragment() {
     lateinit var datePickerDialog: DatePickerDialog
     lateinit var buttonDate: Button
     lateinit var timeButton: Button
+    lateinit var validerFrag1: Button
     var dateFormatBDD: String = ""
     var heureFormatBDD: String = ""
     var monthString: String = ""
@@ -49,6 +49,8 @@ class FirstFragment : Fragment() {
         timeButton = view.findViewById(R.id.timeButton)
         spinner_LigneBus = view.findViewById(R.id.spinner_LigneBus)
         spinner_DirectionBus = view.findViewById(R.id.spinner_Direction)
+        validerFrag1 = view.findViewById(R.id.validerFrag1)
+
         alimenterSpinnerListeBus(spinner_LigneBus)
         alimenterSpinnerDirectionBus(spinner_DirectionBus)
 
@@ -57,6 +59,10 @@ class FirstFragment : Fragment() {
         }
         buttonDate.setOnClickListener {
             openDatePicker(it)
+        }
+
+        validerFrag1.setOnClickListener {
+            validateFrag1(it)
         }
 
         return view
@@ -271,6 +277,33 @@ class FirstFragment : Fragment() {
         timePickerDialog.setTitle("Select Time")
         timePickerDialog.show()
 
+    }
+
+    /**
+     * Valide les choix de l'utilisateur et passe au fragment 2
+     * Place dans un bundle les choix de l'utilisateur
+     */
+    fun validateFrag1(view: View?){
+        if(timeButton?.text != "Choisir une heure"){
+
+            navigateToFragment2("true")
+
+        }else{
+            Toast.makeText(requireActivity(), "Veuillez sélectionner une heure pour continuer.", Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
+    fun navigateToFragment2(data: String) {
+        val fragment2 = SecondFragment()
+        val bundle = Bundle()
+        bundle.putString("data", data)
+        fragment2.arguments = bundle
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.exit_to_left, R.anim.exit_to_right)
+        transaction.replace(R.id.fragment_container, fragment2)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
 
