@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 class SecondFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
+    lateinit var buttonRetour: Button
 
     lateinit var dateFormatBDD: String
     lateinit var heureFormatBDD: String
@@ -25,29 +26,31 @@ class SecondFragment : Fragment() {
         lateinit var viewManager: RecyclerView.LayoutManager
         var objects: List<stops> = listOf()
 
+        buttonRetour = view.findViewById(R.id.retourFrag2)
+
+        buttonRetour.setOnClickListener{
+            navigateTo(FirstFragment(),false)
+        }
+
         dateFormatBDD = arguments?.getString("dateFormatBDD").toString()
         heureFormatBDD = arguments?.getString("heureFormatBDD").toString()
         selectedItemLigneBus = arguments?.getString("selectedItemLigneBus").toString()
         selectedItemDirection = arguments?.getString("selectedItemDirection").toString()
 
-        Toast.makeText(requireActivity(), dateFormatBDD + " ; " + heureFormatBDD + " ; " + selectedItemLigneBus + " ; " + selectedItemDirection, Toast.LENGTH_LONG)
-            .show()
+        //Toast.makeText(requireActivity(), dateFormatBDD + " ; " + heureFormatBDD + " ; " + selectedItemLigneBus + " ; " + selectedItemDirection, Toast.LENGTH_LONG)
+        //    .show()
 
         // Récupération des objets à afficher
         objects = RoomService.appDatabase.getStopsDAO().getAllObjects()
 
         // Initialisation du RecyclerView
         viewManager = LinearLayoutManager(context)
-        viewAdapter = StopsAdapter(objects) /*{ myObject: stops /*-> myObjectClicked(myObject)*/ }*/
+        viewAdapter = StopsAdapter(objects, dateFormatBDD, heureFormatBDD, selectedItemLigneBus, selectedItemDirection) /*{ myObject: stops /*-> myObjectClicked(myObject)*/ }*/
         recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
         }
-        /*
-        Donc je n'ai plus besoin de cette ligne dans la classe SeconFragment : viewAdapter = StopsAdapter(objects) { myObject: stops -> myObjectClicked(myObject) }
-        Peux-tu changer le code de la classe SecondFragment en conséquence ?
-         */
         return view
     }
 
@@ -66,5 +69,16 @@ class SecondFragment : Fragment() {
         thirdFragment.arguments = bundle
         navigateTo(thirdFragment, true)
          */
+    }
+
+    fun navigateTo(fragment: Fragment, addToBackstack: Boolean) {
+        val transaction = requireActivity().supportFragmentManager
+            .beginTransaction()
+            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.exit_to_left, R.anim.exit_to_right)
+            .replace(R.id.fragment_container, fragment)
+        if (addToBackstack) {
+            transaction.addToBackStack(null)
+        }
+        transaction.commit()
     }
 }

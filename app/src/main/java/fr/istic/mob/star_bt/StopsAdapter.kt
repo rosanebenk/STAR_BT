@@ -1,23 +1,30 @@
 package fr.istic.mob.star_bt
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import fr.istic.mob.star_bt.RoomService.context
 
-class StopsAdapter(private val myObjects: List<stops>) :
+class StopsAdapter(private val myObjects: List<stops>, private val date: String, private val heure: String, private val ligne: String, private val direction: String) :
     RecyclerView.Adapter<StopsAdapter.ViewHolder>() {
 
-    //lateinit var textView1: TextView
+    lateinit var dateFormatBDD: String
+    lateinit var heureFormatBDD: String
+    lateinit var selectedItemLigneBus: String
+    lateinit var selectedItemDirection: String
 
-    //class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.my_stop, parent, false)
 
-        //textView1 = view.findViewById<TextView>(R.id.text_field1)
+        dateFormatBDD = date
+        heureFormatBDD = heure
+        selectedItemLigneBus = ligne
+        selectedItemDirection = direction
 
         return ViewHolder(view)
     }
@@ -28,8 +35,15 @@ class StopsAdapter(private val myObjects: List<stops>) :
         holder.textView2.text = current.stop_desc
         holder.textView3.text = current.stop_code
         holder.itemView.setOnClickListener {
-            // Handle click event
-            // Open ThirdFragment and pass myObject as a argument
+            val bundle = Bundle()
+            bundle.putString("heureFormatBDD", heureFormatBDD)
+            bundle.putString("dateFormatBDD", dateFormatBDD)
+            bundle.putString("selectedItemLigneBus", selectedItemLigneBus)
+            bundle.putString("selectedItemDirection", selectedItemDirection)
+            bundle.putString("stopID", current.stop_id)
+            val fragment = ThirdFragment()
+            fragment.arguments = bundle
+            (context as MainActivity).navigateTo(ThirdFragment(), true)
         }
     }
 

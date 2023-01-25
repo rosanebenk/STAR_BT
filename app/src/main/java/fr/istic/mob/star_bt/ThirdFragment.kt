@@ -1,4 +1,7 @@
 package fr.istic.mob.star_bt
 
-class ThirdFragment {
+import androidx.fragment.app.Fragment
+
+class ThirdFragment: Fragment() {
+
 }
