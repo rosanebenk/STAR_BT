@@ -18,4 +18,7 @@ interface stop_times_DAO {
 
     @Query("SELECT departure_time FROM stopTime WHERE trip_id = :tripId and stop_id = :stopId")
     fun getDepartureTime(tripId: String, stopId: String):List<String>
+
+    @Query("SELECT * FROM stopTime WHERE stop_id=:stopid")
+    fun getStopTimeByStopID(stopid: String):List<stopTime>
 }

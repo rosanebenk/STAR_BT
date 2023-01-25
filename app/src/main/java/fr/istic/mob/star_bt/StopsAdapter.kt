@@ -1,14 +1,16 @@
 package fr.istic.mob.star_bt
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import fr.istic.mob.star_bt.RoomService.context
 
-class StopsAdapter(private val myObjects: List<stops>, private val date: String, private val heure: String, private val ligne: String, private val direction: String) :
+class StopsAdapter(private val context: Context, private val myObjects: List<stops>, private val date: String, private val heure: String, private val ligne: String, private val direction: String) :
     RecyclerView.Adapter<StopsAdapter.ViewHolder>() {
 
     lateinit var dateFormatBDD: String
@@ -41,9 +43,15 @@ class StopsAdapter(private val myObjects: List<stops>, private val date: String,
             bundle.putString("selectedItemLigneBus", selectedItemLigneBus)
             bundle.putString("selectedItemDirection", selectedItemDirection)
             bundle.putString("stopID", current.stop_id)
-            val fragment = ThirdFragment()
-            fragment.arguments = bundle
-            (context as MainActivity).navigateTo(ThirdFragment(), true)
+            val fragment3 = ThirdFragment()
+            fragment3.arguments = bundle
+            //(context as MainActivity).navigateTo(ThirdFragment(), true)
+
+            val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+            transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.exit_to_left, R.anim.exit_to_right)
+            transaction.replace(R.id.fragment_container, fragment3)
+            transaction.addToBackStack(null)
+            transaction.commit()
         }
     }
 

@@ -41,11 +41,18 @@ class SecondFragment : Fragment() {
         //    .show()
 
         // Récupération des objets à afficher
-        objects = RoomService.appDatabase.getStopsDAO().getAllObjects()
+        var routeID= RoomService.appDatabase.getRouteDAO().getRouteIdByName(selectedItemLigneBus)
+        Toast.makeText(requireActivity(), routeID.first(), Toast.LENGTH_LONG)
+            .show()
+        objects = RoomService.appDatabase.getStopsDAO().getStopByRouteAndDirection(routeID.first(), selectedItemDirection)
+        //objects = RoomService.appDatabase.getStopsDAO().getAllObjects()
+
+        Toast.makeText(requireActivity(), objects.toString(), Toast.LENGTH_LONG)
+            .show()
 
         // Initialisation du RecyclerView
         viewManager = LinearLayoutManager(context)
-        viewAdapter = StopsAdapter(objects, dateFormatBDD, heureFormatBDD, selectedItemLigneBus, selectedItemDirection) /*{ myObject: stops /*-> myObjectClicked(myObject)*/ }*/
+        viewAdapter = StopsAdapter(requireActivity(), objects, dateFormatBDD, heureFormatBDD, selectedItemLigneBus, selectedItemDirection) /*{ myObject: stops /*-> myObjectClicked(myObject)*/ }*/
         recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
