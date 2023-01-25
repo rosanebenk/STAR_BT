@@ -205,25 +205,26 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
             .withDelimiter(',')
             .withQuote('"')
             .withRecordSeparator("\r\n")
-
-        when (table){
-            "routes" -> {
-                Log.i("Route : ", "insertion")
-                for (csvRecord in csvParser) {
-                    var route = bus_route(
-                        csvRecord.get("route_id"),
-                        csvRecord.get("route_short_name"),
-                        csvRecord.get("route_long_name"),
-                        csvRecord.get("route_desc"),
-                        csvRecord.get("route_type"),
-                        csvRecord.get("route_color"),
-                        csvRecord.get("route_text_color"),
-                    )
-                    //this.database.routes().insert(route)
-                    RoomService.appDatabase.getRouteDAO().addObjet(route)
-                    /*
-                    println("route id : "+ route.route_id+ "/n route color :"+ route.color+"/n route text color :" +route.text_color
-                            +"/n route desc :"+route.desc+"/n route long  :"+route.long_name+"/n route short :"+route.short_name)
+        RoomService.appDatabase.runInTransaction(
+            Runnable {
+                when (table){
+                    "routes" -> {
+                        Log.i("Route : ", "insertion")
+                        for (csvRecord in csvParser) {
+                            var route = bus_route(
+                                csvRecord.get("route_id"),
+                                csvRecord.get("route_short_name"),
+                                csvRecord.get("route_long_name"),
+                                csvRecord.get("route_desc"),
+                                csvRecord.get("route_type"),
+                                csvRecord.get("route_color"),
+                                csvRecord.get("route_text_color"),
+                            )
+                            //this.database.routes().insert(route)
+                            RoomService.appDatabase.getRouteDAO().addObjet(route)
+                            /*
+                            println("route id : "+ route.route_id+ "/n route color :"+ route.color+"/n route text color :" +route.text_color
+                                    +"/n route desc :"+route.desc+"/n route long  :"+route.long_name+"/n route short :"+route.short_name)
 
                      */
 
@@ -320,17 +321,21 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                     )
                     //this.database.trips().insert(trip)
                     RoomService.appDatabase.getTripDAO().addObjet(trip)
-
+                    /*
                     println("trip route  : "+ trip.route_id+ "\t trip srvice id  :"+ trip.service_id+"\t trip id :" +trip.trip_id
                             +"\t trip headsign :"+trip.headsign+"\t trip direction  :"+trip.direction_id+"\t trip blockid :"+trip.blockid
                             +"\n trip wheelchair"+ trip.wheelchairaccessible)
 
-
-                    //println("trip saved")
+                             */
+                            //println("trip saved")
+                        }
+                        println("trips  saved")
+                    }
                 }
-                println("trips  saved")
             }
-        }
+
+        )
+
     }
     private fun getRoutesFromDB() : List<bus_route>{
         println("--------JE SUIS getRoutesFromDB---------")
