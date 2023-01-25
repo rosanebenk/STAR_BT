@@ -122,7 +122,7 @@ class FirstFragment : Fragment() {
      */
     fun alimenterSpinnerDirectionBus(spinnerDirectionBus: Spinner?) {
         idLigneBus = RoomService.appDatabase.getRouteDAO().getRouteIdByName(selectedItemLigneBus)[0].toString()
-        println(idLigneBus)
+
         //var directions = RoomService.appDatabase.getTripDAO().getDirection(idLigneBus)
         //println(directions)
         var directions = RoomService.appDatabase.getTripDAO().getDirections(idLigneBus)
@@ -281,12 +281,11 @@ class FirstFragment : Fragment() {
 
     /**
      * Valide les choix de l'utilisateur et passe au fragment 2
-     * Place dans un bundle les choix de l'utilisateur
      */
     fun validateFrag1(view: View?){
         if(timeButton?.text != "Choisir une heure"){
 
-            navigateToFragment2("true")
+            navigateToFragment2()
 
         }else{
             Toast.makeText(requireActivity(), "Veuillez sélectionner une heure pour continuer.", Toast.LENGTH_LONG)
@@ -294,10 +293,18 @@ class FirstFragment : Fragment() {
         }
     }
 
-    fun navigateToFragment2(data: String) {
+    /**
+     * Appel le fragment 2 avec une animation
+     * Place dans un bundle les choix de l'utilisateur
+     */
+    fun navigateToFragment2() {
         val fragment2 = SecondFragment()
         val bundle = Bundle()
-        bundle.putString("data", data)
+        bundle.putString("heureFormatBDD", heureFormatBDD)
+        bundle.putString("dateFormatBDD", dateFormatBDD)
+        bundle.putString("selectedItemLigneBus", selectedItemLigneBus)
+        bundle.putString("selectedItemDirection", selectedItemDirection)
+
         fragment2.arguments = bundle
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.exit_to_left, R.anim.exit_to_right)
