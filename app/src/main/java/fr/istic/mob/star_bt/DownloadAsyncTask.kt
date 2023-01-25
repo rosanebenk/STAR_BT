@@ -247,12 +247,12 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                     )
                     //this.database.routes().insert(calendar)
                     RoomService.appDatabase.getCalendarDAO().addObjet(calendar)
-                    /*
+
                     println("calendar id : "+ calendar.service_id + "\t calendar start day :"+ calendar.start_date+"/n calendar end date :" +calendar.end_date
                             +"\n calendar monday :"+calendar.monday+"\t calendar tuesday  :"+calendar.tuesday+"/n calendar wednesday :"+calendar.wednesday
                             +"\n calendar thursday :"+calendar.thursday+"\n calendar friday :"+calendar.friday+"\n calendar sat :"+calendar.saturday)
 
-                     */
+
 
 
                 }
@@ -272,12 +272,12 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                     )
                     //this.database.stops().insert(stop)
                     RoomService.appDatabase.getStopsDAO().addObjet(stop)
-                    /*
+
                     println("stop id : "+ stop.stop_id+ "\t stop code :"+ stop.stop_code+"\t stop name :" +stop.stop_name
                             +"\t stop desc :"+stop.stop_desc+"\t stop lati  :"+stop.stop_lat+"\t stop long :"+stop.stop_lon
                             +"\n stop wheelchair"+ stop.wheelchair)
 
-                     */
+
 
                 }
                 println("stops saved")
@@ -295,11 +295,11 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                     )
                     //this.database.stopsTimes().insert(stopsTime)
                     RoomService.appDatabase.getStopsTimeDAO().addObjet(stopsTime)
-                    /*
+
                     println("trip  id : "+ stopsTime.trip_id + "\t stop arrival  :"+stopsTime.arrival_time+"\t stop departure :" +stopsTime.departure_time
                             +"\t stop id :"+stopsTime.stop_id+"\t stop seq  :"+stopsTime.stopSeq )
 
-                     */
+
                 }
                 println("stops times saved")
 
@@ -320,12 +320,12 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
                     )
                     //this.database.trips().insert(trip)
                     RoomService.appDatabase.getTripDAO().addObjet(trip)
-                    /*
+
                     println("trip route  : "+ trip.route_id+ "\t trip srvice id  :"+ trip.service_id+"\t trip id :" +trip.trip_id
                             +"\t trip headsign :"+trip.headsign+"\t trip direction  :"+trip.direction_id+"\t trip blockid :"+trip.blockid
                             +"\n trip wheelchair"+ trip.wheelchairaccessible)
 
-                     */
+
                     //println("trip saved")
                 }
                 println("trips  saved")

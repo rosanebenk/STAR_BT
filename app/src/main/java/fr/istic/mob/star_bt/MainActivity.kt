@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), MyFragmentActivity {
     public var idLigneBus:String = ""
 
     private var url =
-        "https://eu.ftp.opendatasoft.com/star/gtfs/GTFS_2022.3.3.0_20221128_20221218.zip"
+        "https://eu.ftp.opendatasoft.com/star/gtfs/GTFS_2022.5.1.0_20230119_20230212.zip"
 
     private val urlJson = "https://data.explore.star.fr/explore/dataset/tco-busmetro-horaires-gtfs-versions-td/download/?format=json&timezone=Europe/Berlin&lang=fr"
     //private var filePath = "src/resources/myfile.txt"
