@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".FirstFragment">
 
     <TextView
-        android:id="@+id/titre_choisirLigne2"
+        android:id="@+id/titre_choisirLigne"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/spinner_LigneBus2"
+        android:id="@+id/spinner_LigneBus"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -32,7 +32,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/titre_choisirDate2"
+        android:id="@+id/titre_choisirDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -43,22 +43,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/datePickerButton2"
+        android:id="@+id/datePickerButton"
         style="?android:spinnerStyle"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="232dp"
-
+        android:onClick="openDatePicker"
         android:text="DEC 01 2022"
         android:textColor="@color/black"
         android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ExtraText" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/titre_choisirHeure2"
+        android:id="@+id/titre_choisirHeure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -69,13 +68,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/timeButton2"
+        android:id="@+id/timeButton"
         style="?android:spinnerStyle"
         android:layout_width="250dp"
         android:layout_height="61dp"
         android:width="250dp"
         android:height="75dp"
-
+        android:onClick="popTimePicker"
         android:text="@string/titre_heure"
         android:textColor="@color/black"
         android:textSize="22sp"
@@ -89,7 +88,7 @@
         app:layout_constraintVertical_bias="0.514" />
 
     <Spinner
-        android:id="@+id/spinner_Direction2"
+        android:id="@+id/spinner_Direction"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -104,7 +103,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/titre_choisirDirection2"
+        android:id="@+id/titre_choisirDirection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -115,15 +114,25 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="269dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/Notification"
         android:onClick="refreshData"
+        android:text="@string/Notification"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/validerFrag1"
+        android:layout_width="137dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="227dp"
+        android:layout_marginTop="588dp"
+        android:text="@string/validerFrag1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

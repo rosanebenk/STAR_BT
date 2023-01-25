@@ -23,4 +23,7 @@
     <string name="NOV">NOV</string>
     <string name="DEC">DEC</string>
 
+
+    <string name="validerFrag1">Valider</string>
+
 </resources>
