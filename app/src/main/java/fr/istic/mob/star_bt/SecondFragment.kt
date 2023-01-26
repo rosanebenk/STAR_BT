@@ -1,10 +1,12 @@
 package fr.istic.mob.star_bt
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +16,8 @@ class SecondFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     lateinit var buttonRetour: Button
+    lateinit var NomLigne: TextView
+    lateinit var NomDestination: TextView
 
     lateinit var dateFormatBDD: String
     lateinit var heureFormatBDD: String
@@ -26,29 +30,31 @@ class SecondFragment : Fragment() {
         lateinit var viewManager: RecyclerView.LayoutManager
         var objects: List<stops> = listOf()
 
+        dateFormatBDD = arguments?.getString("dateFormatBDD").toString()
+        heureFormatBDD = arguments?.getString("heureFormatBDD").toString()
+        selectedItemLigneBus = arguments?.getString("selectedItemLigneBus").toString()
+        selectedItemDirection = arguments?.getString("selectedItemDirection").toString()
+
+        NomLigne = view.findViewById(R.id.Frag2NomLigne)
+        NomLigne.text = selectedItemLigneBus
+        NomLigne.setTextColor((Color.parseColor("#"+RoomService.appDatabase.getRouteDAO().getTextColorByName(selectedItemLigneBus).first())))
+        NomLigne.setBackgroundColor((Color.parseColor("#"+RoomService.appDatabase.getRouteDAO().getColorByName(selectedItemLigneBus).first())))
+        NomDestination = view.findViewById(R.id.frag2DestLib)
+        NomDestination.text = selectedItemDirection
+
         buttonRetour = view.findViewById(R.id.retourFrag2)
 
         buttonRetour.setOnClickListener{
             navigateTo(FirstFragment(),false)
         }
 
-        dateFormatBDD = arguments?.getString("dateFormatBDD").toString()
-        heureFormatBDD = arguments?.getString("heureFormatBDD").toString()
-        selectedItemLigneBus = arguments?.getString("selectedItemLigneBus").toString()
-        selectedItemDirection = arguments?.getString("selectedItemDirection").toString()
-
         //Toast.makeText(requireActivity(), dateFormatBDD + " ; " + heureFormatBDD + " ; " + selectedItemLigneBus + " ; " + selectedItemDirection, Toast.LENGTH_LONG)
         //    .show()
 
         // Récupération des objets à afficher
         var routeID= RoomService.appDatabase.getRouteDAO().getRouteIdByName(selectedItemLigneBus)
-        Toast.makeText(requireActivity(), routeID.first(), Toast.LENGTH_LONG)
-            .show()
         objects = RoomService.appDatabase.getStopsDAO().getStopByRouteAndDirection(routeID.first(), selectedItemDirection)
         //objects = RoomService.appDatabase.getStopsDAO().getAllObjects()
-
-        Toast.makeText(requireActivity(), objects.toString(), Toast.LENGTH_LONG)
-            .show()
 
         // Initialisation du RecyclerView
         viewManager = LinearLayoutManager(context)
