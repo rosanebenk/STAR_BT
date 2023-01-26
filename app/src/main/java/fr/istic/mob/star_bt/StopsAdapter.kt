@@ -45,9 +45,6 @@ class StopsAdapter(private val context: Context, private val myObjects: List<sto
         }
         holder.itemView.setOnClickListener {
 
-
-
-
             val bundle = Bundle()
             bundle.putString("heureFormatBDD", heureFormatBDD)
             bundle.putString("dateFormatBDD", dateFormatBDD)

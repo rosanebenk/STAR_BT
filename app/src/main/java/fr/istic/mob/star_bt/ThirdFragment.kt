@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +26,7 @@ class ThirdFragment: Fragment() {
     lateinit var NomLigne: TextView
     lateinit var NomArret: TextView
     private lateinit var recyclerView: RecyclerView
+    lateinit var buttonRetour: Button
 
     lateinit var stop_times:List<stopTime>
 
@@ -54,7 +57,11 @@ class ThirdFragment: Fragment() {
         NomArret = view.findViewById(R.id.Frag3NomArret)
         NomArret.text = RoomService.appDatabase.getStopsDAO().getStopById(stopID)[0].stop_name
 
-        println(stopID)
+        buttonRetour = view.findViewById(R.id.retourFrag3)
+
+        buttonRetour.setOnClickListener{
+            navigateToFrag2()
+        }
 
         var routeID= RoomService.appDatabase.getRouteDAO().getRouteIdByName(selectedItemLigneBus)
         var tripID = RoomService.appDatabase.getTripDAO().getTripsByRouteAndDirection(routeID.first(), selectedItemDirection)
@@ -91,5 +98,24 @@ class ThirdFragment: Fragment() {
 
 
         return view
+    }
+
+    fun navigateToFrag2() {
+
+        val bundle = Bundle()
+        bundle.putString("heureFormatBDD", heureFormatBDD)
+        bundle.putString("dateFormatBDD", dateFormatBDD)
+        bundle.putString("selectedItemLigneBus", selectedItemLigneBus)
+        bundle.putString("selectedItemDirection", selectedItemDirection)
+        bundle.putString("stopID", stopID)
+
+        val fragment2 = SecondFragment()
+        fragment2.arguments = bundle
+
+        val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
+        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.exit_to_left, R.anim.exit_to_right)
+        transaction.replace(R.id.fragment_container, fragment2)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }

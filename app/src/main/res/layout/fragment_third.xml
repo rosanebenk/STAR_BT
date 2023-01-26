@@ -7,8 +7,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view2"
-        android:layout_width="413dp"
-        android:layout_height="609dp"
+        android:layout_width="411dp"
+        android:layout_height="535dp"
         android:layout_marginTop="122dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -45,6 +45,16 @@
         android:layout_marginTop="72dp"
         android:text="TextView"
         android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/retourFrag3"
+        android:layout_width="137dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="656dp"
+        android:text="@string/retourFrag"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
