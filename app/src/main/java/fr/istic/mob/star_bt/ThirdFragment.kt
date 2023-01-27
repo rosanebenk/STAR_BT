@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ThirdFragment: Fragment() {
+class ThirdFragment : Fragment() {
     lateinit var dateFormatBDD: String
     lateinit var heureFormatBDD: String
     lateinit var selectedItemLigneBus: String
@@ -28,7 +28,7 @@ class ThirdFragment: Fragment() {
     private lateinit var recyclerView: RecyclerView
     lateinit var buttonRetour: Button
 
-    lateinit var stop_times:List<stopTime>
+    lateinit var stop_times: List<stopTime>
 
     var lundi = 0
     var mardi = 0
@@ -38,7 +38,11 @@ class ThirdFragment: Fragment() {
     var samedi = 0
     var dimanche = 0
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_third, container, false)
 
         lateinit var viewAdapter: RecyclerView.Adapter<*>
@@ -52,19 +56,30 @@ class ThirdFragment: Fragment() {
 
         NomLigne = view.findViewById(R.id.Frag3BusName)
         NomLigne.text = selectedItemLigneBus
-        NomLigne.setTextColor((Color.parseColor("#"+RoomService.appDatabase.getRouteDAO().getTextColorByName(selectedItemLigneBus).first())))
-        NomLigne.setBackgroundColor((Color.parseColor("#"+RoomService.appDatabase.getRouteDAO().getColorByName(selectedItemLigneBus).first())))
+        NomLigne.setTextColor(
+            (Color.parseColor(
+                "#" + RoomService.appDatabase.getRouteDAO().getTextColorByName(selectedItemLigneBus)
+                    .first()
+            ))
+        )
+        NomLigne.setBackgroundColor(
+            (Color.parseColor(
+                "#" + RoomService.appDatabase.getRouteDAO().getColorByName(selectedItemLigneBus)
+                    .first()
+            ))
+        )
         NomArret = view.findViewById(R.id.Frag3NomArret)
         NomArret.text = RoomService.appDatabase.getStopsDAO().getStopById(stopID)[0].stop_name
 
         buttonRetour = view.findViewById(R.id.retourFrag3)
 
-        buttonRetour.setOnClickListener{
+        buttonRetour.setOnClickListener {
             navigateToFrag2()
         }
 
-        var routeID= RoomService.appDatabase.getRouteDAO().getRouteIdByName(selectedItemLigneBus)
-        var tripID = RoomService.appDatabase.getTripDAO().getTripsByRouteAndDirection(routeID.first(), selectedItemDirection)
+        var routeID = RoomService.appDatabase.getRouteDAO().getRouteIdByName(selectedItemLigneBus)
+        var tripID = RoomService.appDatabase.getTripDAO()
+            .getTripsByRouteAndDirection(routeID.first(), selectedItemDirection)
 
         //Récupération du jour pour lier à la table calendrier :
         val inputFormat = SimpleDateFormat("yyyyMMdd")
@@ -73,7 +88,7 @@ class ThirdFragment: Fragment() {
         calendar.time = date
         //Numéro du jour de la semaine
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-        when(dayOfWeek){
+        when (dayOfWeek) {
             Calendar.MONDAY -> lundi = 1
             Calendar.TUESDAY -> mardi = 1
             Calendar.WEDNESDAY -> mercredi = 1
@@ -84,12 +99,31 @@ class ThirdFragment: Fragment() {
             else -> Toast.makeText(requireActivity(), "Invalid day", Toast.LENGTH_LONG).show()
         }
 
-        var stop_times = RoomService.appDatabase.getStopsTimeDAO().getStopTimesWithGivenIdFromTime(stopID, heureFormatBDD, dateFormatBDD,lundi,mardi,mercredi,jeudi,vendredi,samedi,dimanche)
+        var stop_times = RoomService.appDatabase.getStopsTimeDAO().getStopTimesWithGivenIdFromTime(
+            stopID,
+            heureFormatBDD,
+            dateFormatBDD,
+            lundi,
+            mardi,
+            mercredi,
+            jeudi,
+            vendredi,
+            samedi,
+            dimanche
+        )
         println(stop_times)
 
         // Initialisation du RecyclerView
         viewManager = LinearLayoutManager(context)
-        viewAdapter = StopTimeAdapter(requireActivity(), stop_times, dateFormatBDD, heureFormatBDD, selectedItemLigneBus, selectedItemDirection, stopID)
+        viewAdapter = StopTimeAdapter(
+            requireActivity(),
+            stop_times,
+            dateFormatBDD,
+            heureFormatBDD,
+            selectedItemLigneBus,
+            selectedItemDirection,
+            stopID
+        )
         recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view2).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
@@ -113,7 +147,12 @@ class ThirdFragment: Fragment() {
         fragment2.arguments = bundle
 
         val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
-        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.exit_to_left, R.anim.exit_to_right)
+        transaction.setCustomAnimations(
+            R.anim.enter_from_right,
+            R.anim.exit_to_left,
+            R.anim.exit_to_left,
+            R.anim.exit_to_right
+        )
         transaction.replace(R.id.fragment_container, fragment2)
         transaction.addToBackStack(null)
         transaction.commit()

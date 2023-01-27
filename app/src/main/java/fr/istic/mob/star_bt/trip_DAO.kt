@@ -32,4 +32,7 @@ interface trip_DAO {
 
     @Query("SELECT trip_id FROM trip where route_id = :routeId and headsign = :headsign")
     fun getTripsByRouteAndDirection(routeId: String, headsign: String):List<String>
+
+    @Query("SELECT route_id FROM trip where trip_id = :tripId")
+    fun getRouteIDbyTripID(tripId: String):List<String>
 }

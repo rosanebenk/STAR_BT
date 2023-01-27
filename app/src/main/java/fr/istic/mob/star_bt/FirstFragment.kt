@@ -76,8 +76,6 @@ class FirstFragment : Fragment() {
         return view
     }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -320,7 +318,4 @@ class FirstFragment : Fragment() {
         transaction.addToBackStack(null)
         transaction.commit()
     }
-
-
-
 }

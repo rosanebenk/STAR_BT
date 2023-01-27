@@ -22,6 +22,9 @@ interface stop_times_DAO {
     @Query("SELECT * FROM stopTime WHERE stop_id=:stopid and trip_id=:tripid")
     fun getStopTimeByStopIDandTripID(stopid: String, tripid: String):List<stopTime>
 
+    @Query("SELECT * FROM stopTime WHERE stop_id=:stopid and trip_id=:tripid")
+    fun getArrivalTimeByStopIDandTripID(stopid: String, tripid: String):List<stopTime>
+
     @Query("SELECT st.* FROM stoptime st " +
             "INNER JOIN trip t ON st.trip_id = t.trip_id " +
             "INNER JOIN calendar c ON t.service_id = c.service_id " +
