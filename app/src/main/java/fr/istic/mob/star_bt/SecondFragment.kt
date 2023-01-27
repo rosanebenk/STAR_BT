@@ -87,7 +87,7 @@ class SecondFragment : Fragment() {
     fun navigateTo(fragment: Fragment, addToBackstack: Boolean) {
         val transaction = requireActivity().supportFragmentManager
             .beginTransaction()
-            .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.exit_to_left, R.anim.exit_to_right)
+            .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
             .replace(R.id.fragment_container, fragment)
         if (addToBackstack) {
             transaction.addToBackStack(null)

@@ -101,12 +101,7 @@ class FourthFragment: Fragment() {
         fragment3.arguments = bundle
 
         val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
-        transaction.setCustomAnimations(
-            R.anim.enter_from_right,
-            R.anim.exit_to_left,
-            R.anim.exit_to_left,
-            R.anim.exit_to_right
-        )
+        transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
         transaction.replace(R.id.fragment_container, fragment3)
         transaction.addToBackStack(null)
         transaction.commit()
