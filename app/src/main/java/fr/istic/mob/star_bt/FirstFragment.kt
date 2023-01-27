@@ -47,6 +47,14 @@ class FirstFragment : Fragment() {
         buttonDate.text = getTodaysDate()
 
         timeButton = view.findViewById(R.id.timeButton)
+        val currentTime = Calendar.getInstance().apply {
+            val hour = get(Calendar.HOUR_OF_DAY)
+            val minute = get(Calendar.MINUTE)
+            val currentTime = String.format("%02d:%02d", hour, minute)
+            timeButton.text = currentTime
+            heureFormatBDD = timeButton?.text.toString() + ":00"
+        }
+
         spinner_LigneBus = view.findViewById(R.id.spinner_LigneBus)
         spinner_DirectionBus = view.findViewById(R.id.spinner_Direction)
         validerFrag1 = view.findViewById(R.id.validerFrag1)
