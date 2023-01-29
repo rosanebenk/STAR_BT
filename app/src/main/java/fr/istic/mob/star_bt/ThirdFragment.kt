@@ -54,15 +54,7 @@ class ThirdFragment : Fragment() {
         selectedItemDirection = arguments?.getString("selectedItemDirection").toString()
         stopID = arguments?.getString("stopID").toString()
 
-        if (savedInstanceState != null) {
-            // Récupération des données stockées
-            dateFormatBDD = savedInstanceState.getString("KEY_MY_DATE").toString()
-            heureFormatBDD = savedInstanceState.getString("KEY_MY_HOUR").toString()
-            selectedItemLigneBus = savedInstanceState.getString("KEY_MY_LIGNE").toString()
-            selectedItemDirection = savedInstanceState.getString("KEY_MY_DIRECTION").toString()
-            stopID = savedInstanceState.getString("KEY_MY_STOPID").toString()
-            // Utilisation des données récupérées
-        }
+
 
         NomLigne = view.findViewById(R.id.Frag3BusName)
         NomLigne.text = selectedItemLigneBus
@@ -142,6 +134,20 @@ class ThirdFragment : Fragment() {
 
 
         return view
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+        if (savedInstanceState != null) {
+            // Récupération des données stockées
+            dateFormatBDD = savedInstanceState.getString("KEY_MY_DATE").toString()
+            heureFormatBDD = savedInstanceState.getString("KEY_MY_HOUR").toString()
+            selectedItemLigneBus = savedInstanceState.getString("KEY_MY_LIGNE").toString()
+            selectedItemDirection = savedInstanceState.getString("KEY_MY_DIRECTION").toString()
+            stopID = savedInstanceState.getString("KEY_MY_STOPID").toString()
+            // Utilisation des données récupérées
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
