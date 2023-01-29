@@ -25,5 +25,8 @@
 
 
     <string name="validerFrag1">Valider</string>
+    <string name="retourFrag">Retour</string>
+    <string name="Frag2DestText">Destination :</string>
+    <string name="Frag3ArretTexte">Arrêt :</string>
 
 </resources>
