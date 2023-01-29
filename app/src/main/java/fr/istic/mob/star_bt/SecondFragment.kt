@@ -35,6 +35,15 @@ class SecondFragment : Fragment() {
         selectedItemLigneBus = arguments?.getString("selectedItemLigneBus").toString()
         selectedItemDirection = arguments?.getString("selectedItemDirection").toString()
 
+        if (savedInstanceState != null) {
+            // Récupération des données stockées
+            dateFormatBDD = savedInstanceState.getString("KEY_MY_DATE").toString()
+            heureFormatBDD = savedInstanceState.getString("KEY_MY_HOUR").toString()
+            selectedItemLigneBus = savedInstanceState.getString("KEY_MY_LIGNE").toString()
+            selectedItemDirection = savedInstanceState.getString("KEY_MY_DIRECTION").toString()
+            // Utilisation des données récupérées
+        }
+
         NomLigne = view.findViewById(R.id.Frag2NomLigne)
         NomLigne.text = selectedItemLigneBus
         NomLigne.setTextColor((Color.parseColor("#"+RoomService.appDatabase.getRouteDAO().getTextColorByName(selectedItemLigneBus).first())))
@@ -70,6 +79,15 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Sauvegarde les données importantes avant qu'elles ne soient détruites
+        outState.putSerializable("KEY_MY_DATE", dateFormatBDD)
+        outState.putSerializable("KEY_MY_HOUR", heureFormatBDD)
+        outState.putSerializable("KEY_MY_LIGNE", selectedItemLigneBus)
+        outState.putSerializable("KEY_MY_DIRECTION", selectedItemDirection)
     }
 
     private fun myObjectClicked(myObject: stops) {

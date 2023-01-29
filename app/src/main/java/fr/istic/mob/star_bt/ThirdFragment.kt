@@ -54,6 +54,16 @@ class ThirdFragment : Fragment() {
         selectedItemDirection = arguments?.getString("selectedItemDirection").toString()
         stopID = arguments?.getString("stopID").toString()
 
+        if (savedInstanceState != null) {
+            // Récupération des données stockées
+            dateFormatBDD = savedInstanceState.getString("KEY_MY_DATE").toString()
+            heureFormatBDD = savedInstanceState.getString("KEY_MY_HOUR").toString()
+            selectedItemLigneBus = savedInstanceState.getString("KEY_MY_LIGNE").toString()
+            selectedItemDirection = savedInstanceState.getString("KEY_MY_DIRECTION").toString()
+            stopID = savedInstanceState.getString("KEY_MY_STOPID").toString()
+            // Utilisation des données récupérées
+        }
+
         NomLigne = view.findViewById(R.id.Frag3BusName)
         NomLigne.text = selectedItemLigneBus
         NomLigne.setTextColor(
@@ -132,6 +142,16 @@ class ThirdFragment : Fragment() {
 
 
         return view
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Sauvegarde les données importantes avant qu'elles ne soient détruites
+        outState.putSerializable("KEY_MY_DATE", dateFormatBDD)
+        outState.putSerializable("KEY_MY_HOUR", heureFormatBDD)
+        outState.putSerializable("KEY_MY_LIGNE", selectedItemLigneBus)
+        outState.putSerializable("KEY_MY_DIRECTION", selectedItemDirection)
+        outState.putSerializable("KEY_MY_STOPID", stopID)
     }
 
     fun navigateToFrag2() {
