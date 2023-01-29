@@ -186,7 +186,7 @@ class FirstFragment : Fragment() {
         val style: Int = AlertDialog.THEME_HOLO_LIGHT
 
         datePickerDialog = DatePickerDialog(requireActivity(), style, dateSetListener, year, month, day)
-        datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
+        datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 600000
     }
 
     /**

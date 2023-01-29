@@ -2,13 +2,10 @@ package fr.istic.mob.star_bt
 
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Context
 import android.os.AsyncTask
-import android.util.Log
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonArray
-import com.google.gson.JsonParser
-import org.apache.commons.csv.CSVFormat
-import org.apache.commons.csv.CSVParser
+import androidx.appcompat.app.AppCompatActivity
+import org.json.JSONObject
 import java.io.*
 import java.net.URL
 import java.nio.charset.StandardCharsets
@@ -16,63 +13,50 @@ import java.nio.charset.StandardCharsets
 
 class DownloadJsonAsyncTask (activity: Activity, fileName: String) : AsyncTask<String, Int, ByteArray>()
 {
-    private lateinit  var dialog : ProgressDialog
     private lateinit var file: String
     private lateinit var activity: Activity
     private var besoin = ArrayList<String>()
     init{
-        this.dialog = ProgressDialog(activity)
         this.file = fileName
         this.activity = activity
 
     }
     override fun onPreExecute() {
-        dialog.setMessage("Download in progress")
-        dialog.show()
     }
     override fun doInBackground(vararg params: String):ByteArray? {
-            return downloadUrl(params[0])
+            return downloadJson(params[0])
     }
     override fun onProgressUpdate(vararg values: Int?){}
 
-    override fun onPostExecute(result: ByteArray) {
-        if(dialog.isShowing) { dialog.dismiss() }
+    override fun onPostExecute(result: ByteArray){
+        var url=""
         try{
-            println(result)
+            //println("json"+result)
 
-            println("------------------------------------------------------------------")
-            println("------------------------------------------------------------------")
-            println("------------------------------------------------------------------")
-            println("------------------------------------------------------------------")
-            println("------------------------------------------------------------------")
-            println("------------------------------------------------------------------")
-            println("------------------------------------------------------------------")
             // Conversion de l'ArrayByte en string
             val resultString = String(
                 result,
                 StandardCharsets.UTF_8
             )
-            println(resultString)
+            //println(resultString)
+            var stringjson =resultString.substring(1,resultString.length-1)
+            //println(stringjson)
+            var json = stringjson.toByteArray()
 
-
-            // Conversion du String en Json
-            val jsonParser = JsonParser()
-            val jsonArrayOutput: JsonArray = jsonParser.parse(
-                resultString
-            ) as JsonArray
-            println(
-                "Output : "
-                        + jsonArrayOutput
-            )
+            val outputStream = activity.openFileOutput(file, Context.MODE_PRIVATE)
+            outputStream.write(json)
+            outputStream.flush()
+            outputStream.close()
+            getNewlinkfromJson("update.json")
         }catch(e: IOException) { e.printStackTrace() }
     }
 
-    private fun downloadUrl(myurl: String): ByteArray? {
+    private fun downloadJson(myurl: String): ByteArray? {
         var open: DataInputStream? = null
         try{
             val url = URL(myurl)
             open = DataInputStream(url.openStream())
-            return readIt(open)
+            return readfile(open)
 
         }catch(e: Exception) {
             e.printStackTrace()
@@ -83,7 +67,7 @@ class DownloadJsonAsyncTask (activity: Activity, fileName: String) : AsyncTask<S
         return null
     }
 
-    private fun readIt(stream: InputStream): ByteArray? {
+    private fun readfile(stream: InputStream): ByteArray? {
         try {
             val buffer = ByteArrayOutputStream()
             var i = stream.read()
@@ -91,7 +75,6 @@ class DownloadJsonAsyncTask (activity: Activity, fileName: String) : AsyncTask<S
                 buffer.write(i)
                 i = stream.read()
             }
-
             return buffer.toByteArray()
         } catch (e: IOException) {
             e.printStackTrace()
@@ -99,52 +82,47 @@ class DownloadJsonAsyncTask (activity: Activity, fileName: String) : AsyncTask<S
         return null
     }
 
-
-
-    private fun insertintoDataBase(buffer : BufferedReader, table : String){
-        RoomService.appDatabase.getRouteDAO().deleteAllObjects()
-        RoomService.appDatabase.getStopsDAO().deleteAllObjects()
-        RoomService.appDatabase.getCalendarDAO().deleteAllObjects()
-        RoomService.appDatabase.getTripDAO().deleteAllObjects()
-        RoomService.appDatabase.getStopsTimeDAO().deleteAllObjects()
-        //lecture du fichier txt
-       // val csvReader = CSVReader(this.activity,File(this.activity.applicationContext.filesDir.toString() + File.separator +"DATA/","calendar.txt"))
-
-        //val rows = csvReader.readCSV()
-        val csvParser = CSVParser(buffer, CSVFormat.DEFAULT
-            .withFirstRecordAsHeader()
-            .withIgnoreHeaderCase()
-            .withTrim())
-        CSVFormat.DEFAULT
-            .withDelimiter(',')
-            .withQuote('"')
-            .withRecordSeparator("\r\n")
-
-        when (table){
-            "routes" -> {
-                Log.i("Route : ", "insertion")
-                for (csvRecord in csvParser) {
-                    var route = bus_route(
-                        csvRecord.get("route_id"),
-                        csvRecord.get("route_short_name"),
-                        csvRecord.get("route_long_name"),
-                        csvRecord.get("route_desc"),
-                        csvRecord.get("route_type"),
-                        csvRecord.get("route_color"),
-                        csvRecord.get("route_text_color"),
-                    )
-                    //this.database.routes().insert(route)
-                    RoomService.appDatabase.getRouteDAO().addObjet(route)
-                    /*
-                    println("route id : "+ route.route_id+ "/n route color :"+ route.color+"/n route text color :" +route.text_color
-                            +"/n route desc :"+route.desc+"/n route long  :"+route.long_name+"/n route short :"+route.short_name)
-
-                     */
-
-                }
-                println("routes saved")
-            }
-
+    private fun getNewlinkfromJson(fileJson:String){
+        val file = File(this.activity.applicationContext.filesDir,fileJson)
+        val fileReader = FileReader(file)
+        val bufferedReader = BufferedReader(fileReader)
+        val stringBuilder = StringBuilder()
+        var line = bufferedReader.readLine()
+        while (line != null) {
+            stringBuilder.append(line).append("\n")
+            line = bufferedReader.readLine()
         }
+        val inputString = bufferedReader.use { it.readText() }
+        //println("inputstring" +inputString)
+        bufferedReader.close()
+
+        // This responce will have Json Format String
+        val responce = stringBuilder.toString()
+        val jsonObject = JSONObject(responce)
+        var url = jsonObject.getJSONObject("fields").getString("url")
+        doSave(url)
+        println("new URL "+url)
     }
+    fun doSave(url : String) {
+       if (url != getPreviousLink()){
+           val sharedPreferences = this.activity.getSharedPreferences("fr.istic.mob.star_bt", AppCompatActivity.MODE_PRIVATE)
+           val editor = sharedPreferences.edit()
+           editor.putString("urlDownload", url)
+           editor.putBoolean("linkUpdated", true)
+           editor.apply()
+       }
+
+    }
+    fun getPreviousLink():String{
+        var oldUrl=""
+        var Url = ""
+        val sharedPreferences = this.activity.getSharedPreferences("fr.istic.mob.star_bt", AppCompatActivity.MODE_PRIVATE)
+        if (sharedPreferences != null) {
+            Url = sharedPreferences.getString("urlDownload", oldUrl).toString()
+            println("previous link  "+Url)
+        }
+        return Url
+    }
+
+
 }

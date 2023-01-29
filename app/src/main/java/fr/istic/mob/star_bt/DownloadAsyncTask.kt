@@ -4,10 +4,12 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.AsyncTask
+import android.os.Looper
 import android.util.Log
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import java.io.*
+import java.net.HttpURLConnection
 import java.net.URL
 import java.util.zip.ZipFile
 
@@ -19,7 +21,8 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
     private lateinit var activity: Activity
     private var besoin = ArrayList<String>()
     init{
-        this.dialog = ProgressDialog(activity)
+//        Looper.prepare()
+//        this.dialog = ProgressDialog(activity)
         this.file = fileName
         this.activity = activity
         this.besoin.add("calendar.txt")
@@ -29,10 +32,13 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
         this.besoin.add("trips.txt")
     }
     override fun onPreExecute() {
+        //Looper.prepare()
+        this.dialog = ProgressDialog(activity)
         dialog.setMessage("Download in progress, \nDue to big files, it may takes 15 mins")
         dialog.show()
     }
     override fun doInBackground(vararg params: String):ByteArray? {
+
             return downloadUrl(params[0])
     }
     override fun onProgressUpdate(vararg values: Int?){}
@@ -72,22 +78,6 @@ class DownloadAsyncTask (activity: Activity, fileName: String) : AsyncTask<Strin
             getStopsFromDB()
             getTripFromDB()
             getStopTimesFromDB()
-
-            //lecture du fichier txt
-            //val csvReader = CSVReader(this.activity,File(this.activity.applicationContext.filesDir.toString() + File.separator +"DATA/","calendar.txt"))
-
-             //   val rows = csvReader.readCSV()
-//                for (i in 0 until rows!!.size) {
-//                    Log.e(
-//                        "",
-//                        java.lang.String.format(
-//                            "row %s: %s, %s",
-//                            i,
-//                            rows!!.get(i).get(0),
-//                            rows!!.get(i).get(1)
-//                        )
-//                    )
-//                }
 
         }catch(e: IOException) { e.printStackTrace() }
         if(dialog.isShowing) { dialog.dismiss() }
